@@ -1,0 +1,16 @@
+{% extends 'cal/base.html' %}
+
+{% block title %}
+<!--달력-->
+{% endblock %}
+
+{% block content %}
+<div class="clearfix">
+	<a class="btn btn-info left" href="{% url 'cal:calendar' %}?{{ prev_month }}"> < </a>
+	<a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ next_month }}"> > </a>
+	<a class="btn btn-info right" href="{% url 'cal:list' %}"> 회원 목록 </a>
+	<a class="btn btn-info right" href=""> 현황표 </a>
+</div>
+{{ calendar }}
+
+{% endblock %}
