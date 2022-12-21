@@ -1,0 +1,39 @@
+{% extends 'cal/base.html' %}
+
+{% block title %}
+<!--회원 목록-->
+{% endblock %}
+
+{% block content %}
+<div class="clearfix">
+  <a class="btn btn-info left" href="{% url 'cal:calendar' %}"> 달력 </a>
+  <a class="btn btn-info right" href="{% url 'cal:event_mem_new'%}"> 회원 추가 </a>
+</div>
+
+
+<table>
+    {% for na_me in name_list %}
+        <tr>
+            <td width="95%" height="100px">
+                <div style="margin-top: 15px;margin-left: 7px;margin-right: 7px;">
+                    <form action="{% url 'cal:event_mem_edit' na_me.id %}" method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-info mem_list" type="submit" value="{{ na_me.name }}">
+                    </form>
+                </div>
+            </td>
+            <td height="100px">
+                <div style="margin-top: 15px;margin-right: 7px;">
+                    <form action="{% url 'cal:delete_post' na_me.id %}" method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-info mem_list" type="submit" value="삭제">
+                    </form>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<!--        <a class="btn btn-info mem_list" href="/event_mem/edit/{{ na_me.id }}/"> {{ na_me.name }} </a>-->
+
+
+{% endblock %}

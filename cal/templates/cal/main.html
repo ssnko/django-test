@@ -1,0 +1,8 @@
+#templates/users/main.hmtl
+
+<form action="{% url 'cal:main' %}" method="post">
+  {% csrf_token %}
+  <input type="input" name="username" placeholder="username">
+  <input type="password" name="password" placeholder="password">
+  <input type="submit" value="Login">
+</form>
