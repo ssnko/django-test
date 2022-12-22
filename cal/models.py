@@ -42,3 +42,7 @@ class Mem(models.Model):
 # python manage.py makemigrations
 # python manage.py migrate
 # python manage.py runserver
+
+# git add .
+# git commit -m "message"
+# git push -u origin master

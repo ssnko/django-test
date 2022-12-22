@@ -46,7 +46,7 @@
     <div class="clearfix">
         <form action="{% url 'cal:delete_schedule'%}" method="get">
             {% csrf_token %}
-            <a class="btn btn-info mem_list" style="width:93%;" href="/schedule/edit/{{ schedule.id }}/"> {{ schedule.name }} - {{ schedule.time }} </a>
+            <a class="btn btn-info mem_list schedule_list" href="/schedule/edit/{{ schedule.id }}/"> {{ schedule.name }} - {{ schedule.time }}<br>{{ schedule.description }} </a>
             <input type="hidden" name="schedule" value="{{ schedule.id }}">
             <input type="hidden" name="event_id" value="1000000">
             <input type="hidden" name="year" value="{{ year }}">

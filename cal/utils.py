@@ -21,14 +21,16 @@ class Calendar(HTMLCalendar):
 		d = ''
 		for event in events_per_day:
 			count = Mem.objects.filter(id=event.name_id).values()[0]['count']
+			if count == None:
+				count = 0
 			# d += f'<li> {event.get_html_url} </li>'
-			d += f'<li>{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+			d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count}</li>'
 		if day != 0:
 			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}&id={''}'"
 			now = datetime.now()
 			if f'{self.year}{self.month}{day}' == f'{now.year}{now.month}{now.day}':
-				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul>{d} </ul></td>"
-			return f"<td onClick=location.href={b} class='cal_line'><span class='date'>{day}</span><ul style='padding:0;'>{d} </ul></td>"
+				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul>{d}</ul></td>"
+			return f"<td onClick=location.href={b} class='cal_line'><span class='date'>{day}</span><ul style='padding:0;'>{d}</ul></td>"
 		return '<td class="cal_line"></td>'
 
 	# formats a week as a tr
@@ -55,8 +57,8 @@ class Calendar(HTMLCalendar):
 		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
 		# cal += f'{self.formatweekheader()}\n'
 		cal += '''<tr><th></th><th class="sun cal_line">일</th><th class="mon cal_line">월</th><th class="tue cal_line">화</th><th class="wed cal_line">수</th><th class="thu cal_line">목</th><th class="fri cal_line">금</th><th class="sat cal_line">토</th>
-			<th class="cal_line" style="width: 70px;"><a style="font-size: 13px;">수업</a></th>
-			<th class="cal_line" style="width: 70px;"><a style="font-size: 13px;">회원</a></th></tr>'''
+			<th class="cal_line" style="width: 70px;"><a>수업</a></th>
+			<th class="cal_line" style="width: 70px;"><a>회원</a></th></tr>'''
 		self.week_count = 1
 		self.week_add = [0,0,0,0,0,0,0]
 		for week in self.monthdays2calendar(self.year, self.month):
@@ -128,13 +130,13 @@ class Calendar2(HTMLCalendar):
 		# return '<td></td>'
 
 		for event in events_per_day:
-			d += f'<li>{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+			d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
 		if day != 0:
 			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}&id={self.id}'"
 			now = datetime.now()
 			if f'{self.year}{self.month}{day}' == f'{now.year}{now.month}{now.day}':
-				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul> {d} </ul></td>"
-			return f"<td onClick=location.href={b} class='cal_line'><span class='date'>{day}</span><ul> {d} </ul></td>"
+				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul>{d}</ul></td>"
+			return f"<td onClick=location.href={b} class='cal_line'><span class='date'>{day}</span><ul style='padding:0;'>{d}</ul></td>"
 		return '<td class="cal_line"></td>'
 
 	# formats a week as a tr
