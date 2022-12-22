@@ -136,3 +136,5 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = '/accounts/login'
 #로그아웃 성공시 이동할 url
 LOGOUT_REDIRECT_URL = '/'
+
+CSRF_TRUSTED_ORIGINS = ['https://port-0-django-test-883524lbxl6zn6.gksl2.cloudtype.app/']
