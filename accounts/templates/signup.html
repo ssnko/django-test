@@ -3,7 +3,7 @@
 
 <div class="container">
   <h1>회원가입</h1>
-  <form method="POST" action="{% url 'signup' %}">
+  <form method="POST" action="{% url 'accounts:signup' %}">
   {% csrf_token %}
     ID : 
     <input name="username" type="text" value="">

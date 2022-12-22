@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig',
     'cal.apps.CalConfig',
-    'accounts.apps.AccountsConfig'
 ]
 
 MIDDLEWARE = [
@@ -126,3 +126,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+#config.settings.py
+# User enroll
+# AUTH_USER_MODEL = 'accounts.CustomUser'
+#로그인 성공시 이동할 url
+LOGIN_REDIRECT_URL = "/"
+#로그인 해야 요청할 수 있는 view를 로그인 안하고 요청했을 때 이동할 URL
+LOGIN_URL = '/accounts/login'
+#로그아웃 성공시 이동할 url
+LOGOUT_REDIRECT_URL = '/'

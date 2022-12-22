@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
+import cal.views
 
 # Create your views here.
 
@@ -19,7 +20,7 @@ def login(request):
         user = auth.authenticate(request, username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return redirect('home')
+            return redirect('cal:calendar')
         else:
             return render(request,'login.html', {'error':'username or password is incorrect'})
     else:
@@ -28,5 +29,5 @@ def login(request):
 def logout(request):
     if request.method == "POST":
         auth.logout(request)
-        return redirect('home')
-    return render(request,'signup.html')
+        return render(request,'login.html')
+    return render(request,'login.html')
