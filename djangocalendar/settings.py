@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://port-0-django-test-883524lbxl6zn6.gksl2.cloudtype.app']
+CSRF_TRUSTED_ORIGINS = ['https://www.memberremember.kro.kr']
 # <<<<<<< HEAD
 #
 # =======
