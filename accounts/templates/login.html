@@ -1,23 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
-  <div class="container">
-    <h1>로그인</h1>
-    <form method="POST" action="{% url 'accounts:login' %}">
-      {% csrf_token %}
-      ID : 
-      <input name="username" type="text" value="">
-      <br>
-      <br>
-      PW :
-      <input name="password" type="password" value="">
-      <br>
-      <br>
-      <input class="btn btn-primary" type="submit" value="로그인">
-    </form>
+<!--  <div class="container">-->
+<!--    <h1>로그인</h1>-->
+<!--    <form method="POST" action="{% url 'accounts:login' %}">-->
+<!--      {% csrf_token %}-->
+<!--      아이디 :-->
+<!--      <input name="username" type="text" value="">-->
+<!--      <br>-->
+<!--      <br>-->
+<!--      패스워드 :-->
+<!--      <input name="password" type="password" value="">-->
+<!--      <br>-->
+<!--      <br>-->
+<!--      <input class="btn btn-primary" type="submit" value="로그인">-->
+<!--    </form>-->
 
-    {% if error %}
-    {{error}}
-    {% endif %}
-  </div>
+<!--    {% if error %}-->
+<!--    {{error}}-->
+<!--    {% endif %}-->
+<!--  </div>-->
+<div class="login-wrapper">
+    <h2>로그인</h2>
+    <form method="post" action="{% url 'accounts:login' %}" id="login-form">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="아이디">
+        <input type="password" name="password" placeholder="패스워드">
+<!--        <label for="remember-check">-->
+<!--            <input type="checkbox" id="remember-check">아이디 저장하기-->
+<!--        </label>-->
+        <input type="submit" value="로그인">
+    </form>
+</div>
 
 {% endblock %}

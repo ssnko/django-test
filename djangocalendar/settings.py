@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['https://port-0-django-test-883524lbxl6zn6.gksl2.cloudtype.app']
+
 
 # Application definition
 
@@ -37,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts.apps.AccountsConfig',
     'cal.apps.CalConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -114,7 +116,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -127,12 +129,17 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-#config.settings.py
-# User enroll
-# AUTH_USER_MODEL = 'accounts.CustomUser'
-#로그인 성공시 이동할 url
-LOGIN_REDIRECT_URL = "/"
-#로그인 해야 요청할 수 있는 view를 로그인 안하고 요청했을 때 이동할 URL
-LOGIN_URL = '/accounts/login'
-#로그아웃 성공시 이동할 url
-LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_SESSION_REMEMBER = True  # 브라우저를 닫아도 세션기록 유지! [ 로그인 안풀리게 ! ]
+SESSION_COOKIE_AGE = 864000  # 쿠키를 한시간만 저장 [ 세션 ]
+
+# # User enroll
+# # AUTH_USER_MODEL = 'accounts.CustomUser'
+# #로그인 성공시 이동할 url
+# LOGIN_REDIRECT_URL = "/"
+# #로그인 해야 요청할 수 있는 view를 로그인 안하고 요청했을 때 이동할 URL
+# LOGIN_URL = '/accounts/login'
+# #로그아웃 성공시 이동할 url
+LOGOUT_REDIRECT_URL = '/accounts/login'
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

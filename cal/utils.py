@@ -24,12 +24,18 @@ class Calendar(HTMLCalendar):
 			if count == None:
 				count = 0
 			# d += f'<li> {event.get_html_url} </li>'
-			d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count}</li>'
+
+			if event.cancel == '취소':
+				d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
+			elif event.cancel == '차감':
+				d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+			else:
+				d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
 		if day != 0:
-			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}&id={''}'"
+			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}'"
 			now = datetime.now()
 			if f'{self.year}{self.month}{day}' == f'{now.year}{now.month}{now.day}':
-				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul>{d}</ul></td>"
+				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul style='padding:0;'>{d}</ul></td>"
 			return f"<td onClick=location.href={b} class='cal_line'><span class='date'>{day}</span><ul style='padding:0;'>{d}</ul></td>"
 		return '<td class="cal_line"></td>'
 
@@ -50,12 +56,15 @@ class Calendar(HTMLCalendar):
 
 	# formats a month as a table
 	# filter events by year and month
-	def formatmonth(self, withyear=True):
-		events = Event.objects.filter(time__year=self.year, time__month=self.month)
+	def formatmonth(self, account, withyear=True):
+		events = Event.objects.filter(account=account, time__year=self.year, time__month=self.month).order_by('time')
+		# print(events)
+		#
+		# events = Event.objects.filter(time__year=self.year, time__month=self.month)
 
 		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
 		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
-		# cal += f'{self.formatweekheader()}\n'
+		# accounts += f'{self.formatweekheader()}\n'
 		cal += '''<tr><th></th><th class="sun cal_line">일</th><th class="mon cal_line">월</th><th class="tue cal_line">화</th><th class="wed cal_line">수</th><th class="thu cal_line">목</th><th class="fri cal_line">금</th><th class="sat cal_line">토</th>
 			<th class="cal_line" style="width: 70px;"><a>수업</a></th>
 			<th class="cal_line" style="width: 70px;"><a>회원</a></th></tr>'''
@@ -113,6 +122,8 @@ class Calendar2(HTMLCalendar):
 	# filter events by day
 	def formatday(self, day, events):
 		count = Mem.objects.filter(id=self.id).values()[0]['count']
+		if count == None:
+			count = 0
 		filter_name = events.filter(name_id=self.id)
 		events_per_day = filter_name.filter(time__day=day)
 		self.count += len(events_per_day)
@@ -130,12 +141,15 @@ class Calendar2(HTMLCalendar):
 		# return '<td></td>'
 
 		for event in events_per_day:
-			d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+			if event.cancel != '취소':
+				d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+			else:
+				d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
 		if day != 0:
 			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}&id={self.id}'"
 			now = datetime.now()
 			if f'{self.year}{self.month}{day}' == f'{now.year}{now.month}{now.day}':
-				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul>{d}</ul></td>"
+				return f"<td onClick=location.href={b} class='cal_line'><span class='circle'>{day}</span><ul style='padding:0;'>{d}</ul></td>"
 			return f"<td onClick=location.href={b} class='cal_line'><span class='date'>{day}</span><ul style='padding:0;'>{d}</ul></td>"
 		return '<td class="cal_line"></td>'
 
@@ -156,12 +170,13 @@ class Calendar2(HTMLCalendar):
 
 	# formats a month as a table
 	# filter events by year and month
-	def formatmonth(self, withyear=True):
-		events = Event.objects.filter(time__year=self.year, time__month=self.month)
+	def formatmonth(self, account, withyear=True):
+		events = Event.objects.filter(account=account, time__year=self.year, time__month=self.month).order_by('time')
+		# events = Event.objects.filter(time__year=self.year, time__month=self.month)
 
 		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
 		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
-		# cal += f'{self.formatweekheader()}\n'
+		# accounts += f'{self.formatweekheader()}\n'
 		cal += '''<tr><th></th><th class="sun cal_line">일</th><th class="mon cal_line">월</th><th class="tue cal_line">화</th><th class="wed cal_line">수</th><th class="thu cal_line">목</th><th class="fri cal_line">금</th><th class="sat cal_line">토</th>
 					<th class="cal_line" style="width: 70px;"><a style="font-size: 13px;">수업</a></th>
 					<th class="cal_line" style="width: 70px;"><a style="font-size: 13px;">회원</a></th></tr>'''

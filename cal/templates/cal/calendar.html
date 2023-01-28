@@ -7,10 +7,14 @@
 {% block content %}
 <div class="clearfix">
 	<a class="btn btn-info left" href="{% url 'cal:calendar' %}?{{ prev_month }}"> < </a>
+<!--	<form method="POST" action="{% url 'accounts:logout' %}">-->
+<!--		{% csrf_token %}-->
+<!--		<a class="btn btn-info left" style="margin-left: 30px" >{{ user.username }}</a>-->
+<!--		<input class="btn btn-info left" type="submit" value="로그아웃">-->
+<!--	</form>-->
 	<a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ next_month }}"> > </a>
 	<a class="btn btn-info right" href="{% url 'cal:list' %}"> 회원 목록 </a>
 	<a class="btn btn-info right" href=""> 현황표 </a>
 </div>
 {{ calendar }}
-
 {% endblock %}

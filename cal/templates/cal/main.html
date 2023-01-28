@@ -1,23 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'cal/base.html' %}
 {% block content %}
-  <div class="container">
-    <h1>로그인</h1>
-    <form method="POST" action="{% url 'cal:main' %}">
-      {% csrf_token %}
-      ID : 
-      <input name="username" type="text" value="">
-      <br>
-      <br>
-      PW :
-      <input name="password" type="password" value="">
-      <br>
-      <br>
-      <input class="btn btn-primary" type="submit" value="로그인">
-    </form>
-
-    {% if error %}
-    {{error}}
-    {% endif %}
+<div class="login_form">
+  <div>
+    <a class="btn btn-info" href = '/accounts/login' style="width: 100px;">로그인</a>
   </div>
-
+  <div>
+    <a class="btn btn-info" href = '/accounts/signup' style="width: 100px;">회원가입</a>
+  </div>
+</div>
 {% endblock %}

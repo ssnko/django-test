@@ -5,10 +5,6 @@
 {% endblock %}
 
 {% block content %}
-<div class="clearfix">
-  <a class="btn btn-info left" href="{% url 'cal:list' %}"> << </a>
-<!--    <input class="btn btn-info left" type="button" value="<<" onclick="history.back();" />-->
-</div>
 
 {% if form.errors %}
     {% for field in form %}
@@ -29,15 +25,438 @@
     <a class="center" style="color:red">중복</a>
 {% endif %}
 
-<form method="post">
-  {% csrf_token %}
-  <table class="form form-table">
-    {{ form }}
-    <tr><td colspan="2">
-        <button type="submit" class="btn btn-info right"> 확인 </button>
-    </td></tr>
-  </table>
+<div id="alarm_box" class="alarm_box" hidden><button onclick="alarm_box_close();">{{ alarm_text }}</button></div>
+<script>
+    function alarm_box_close() {
+        document.getElementById('alarm_box').hidden = true;
+    }
+</script>
+<form method="post" enctype="multipart/form-data" class="mem_ground">
+    <div class="clearfix">
+        <a class="btn btn-info left" href="{% url 'cal:list' %}"> << </a>
+        <button type="button" id="form_edit" class="btn btn-info right" onclick="edit()">수정</button>
+        <button type="button" id="form_cancel" class="btn btn-info right" onclick="cancel()" hidden>취소</button>
+        <button type="submit" id="form_save" class="btn btn-info right" hidden> 저장 </button>
+        <button type="button" id="re_save" class="btn btn-info right" onclick="re_click()" hidden> 재등록 </button>
+
+        <script>
+            function edit() {
+              document.getElementById("form_field").disabled = false;
+              $(form_table).find("input").css({"border":"1px solid #17a2b8"});
+              $(form_table).find("select").css({"border":"1px solid #17a2b8"});
+              $(form_table2).find("input").css({"border":"1px solid #17a2b8"});
+              document.getElementById("form_cancel").hidden = false;
+              document.getElementById("form_save").hidden = false;
+              document.getElementById("form_edit").hidden = true;
+              document.getElementById("chart_form").hidden = true;
+              document.getElementById("chart_edit").hidden = false;
+              document.getElementById("re_save").hidden = false;
+              document.getElementById('chart_width_edit').scrollLeft = 1000;
+            }
+            function cancel() {
+              document.getElementById("form_field").disabled = true;
+              $(form_table).find("input").css({"border":"0px solid #17a2b8"});
+              $(form_table).find("select").css({"border":"0px solid #17a2b8"});
+              $(form_table2).find("input").css({"border":"0px solid #17a2b8"});
+              document.getElementById("form_cancel").hidden = true;
+              document.getElementById("form_save").hidden = true;
+              document.getElementById("form_edit").hidden = false;
+              document.getElementById("chart_form").hidden = false;
+              document.getElementById("chart_edit").hidden = true;
+              document.getElementById("re_save").hidden = true;
+            }
+            function re_click() {
+                var data1 = document.getElementById("id_membership_start_date").value;
+                var data2 = document.getElementById("id_membership_end_date").value;
+                var data3 = document.getElementById("id_health_start_date").value;
+                var data4 = document.getElementById("id_health_end_date").value;
+                var data5 = document.getElementById("id_class_start_date").value;
+                var data6 = document.getElementById("id_class_end_date").value;
+                var data7 = document.getElementById("id_resist_category").value;
+                var data8 = document.getElementById("id_payment").value;
+                var data9 = document.getElementById("id_count").value;
+                var data10 = document.getElementById("id_money").value;
+                var data11 = document.getElementById("id_food").value;
+
+                if(data1 == '' && data2 == '' && data3 == '' && data4 == '' && data5 == '' && data6 == '' && data8 == '' && data9 == '' && data10 == '' && data11 == ''){
+                    return;
+                }
+                var data_list = [data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11];
+
+                var data = [];
+
+                var old_data = document.getElementById("id_re_data").value
+                if(old_data != ''){
+                    old_data = JSON.parse(old_data.replace(/"/g, '"'));
+
+
+                    if(typeof(old_data[0]) == 'string'){
+                        data.push(old_data);
+                    }else{
+                        for (var i=0; i < old_data.length; i++ ){
+                            data.push(old_data[i]);
+                        }
+                    }
+                }
+                data.push(data_list);
+                var new_data = JSON.stringify(data);
+
+                document.getElementById("id_re_data").value = new_data;
+
+                document.getElementById("id_membership_start_date").value = '';
+                document.getElementById("id_membership_end_date").value = '';
+                document.getElementById("id_health_start_date").value = '';
+                document.getElementById("id_health_end_date").value = '';
+                document.getElementById("id_class_start_date").value = '';
+                document.getElementById("id_class_end_date").value = '';
+                document.getElementById("id_resist_category").value = '재등록';
+                document.getElementById("id_payment").value = '';
+                document.getElementById("id_count").value = '';
+                document.getElementById("id_money").value = '';
+                document.getElementById("id_food").value = '';
+            }
+        </script>
+    </div>
+    <fieldset id="form_field" disabled>
+        {% csrf_token %}
+
+        <table id="form_table" style="float: left;">
+            <tr>
+                <td class="mem_name">{{ form.name }} <a class="mem_phone">{{ form.phone }}</a></td>
+            </tr>
+            <tr>
+                <td class="mem_cs1">등록날짜 <b>:</b> {{ form.start_date|default_if_none:'' }}</td>
+            </tr>
+            <tr>
+                <td class="mem_cs1">회원권 시작일 <b>:</b> {{ form.membership_start_date }}</td>
+            </tr>
+            <tr>
+                <td class="mem_cs1">회원권 종료일 <b>:</b> {{ form.membership_end_date }}</td>
+            </tr>
+            <tr>
+                <td class="mem_cs1">헬스 시작일 <b>:</b> {{ form.health_start_date }}</td>
+            </tr>
+            <tr>
+                <td class="mem_cs1">헬스 종료일 <b>:</b> {{ form.health_end_date }}</td>
+            </tr>
+            <tr>
+                <td class="mem_cs1">수업 시작일 <b>:</b> {{ form.class_start_date }}</td>
+            </tr>
+            <tr>
+                <td class="mem_cs1">수업 종료(예상)일 <b>:</b> {{ form.class_end_date|default:"" }}</td>
+            </tr>
+            <tr>
+                <td>등록 구분 <b>:</b> {{ form.resist_category }}</td>
+            </tr>
+            <tr>
+                <td>결제 방식 <b>:</b> {{ form.payment }}</td>
+            </tr>
+            <tr>
+                <td>횟수 <b>:</b> {{ form.count }}</td>
+            </tr>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script>
+                $(document).ready(function(){
+                    $("select[name=count]").change(function () {
+                        var count_money = '{{ count_money }}';
+                        count_money = JSON.parse(count_money.replace(/&#x27;/g, '"').replace(/None/g, '""'));
+                        var money = count_money[1][count_money[0].findIndex((e) => e == document.getElementById("id_count").value)];
+                        document.getElementById("id_money").value = money;
+                    });
+                });
+            </script>
+            <tr>
+                <td>금액 <b>:</b> {{ form.money }}</td>
+            </tr>
+            <tr>
+                <td>식단진행 <b>:</b> {{ form.food }}</td>
+            </tr>
+            <tr>
+                <td>직업 <b>:</b> {{ form.job }}</td>
+            </tr>
+            <tr>
+                <td>거주 <b>:</b> {{ form.residence }}</td>
+            </tr>
+            <tr>
+                <td>키 <b>:</b> {{ form.stature }}</td>
+            </tr>
+            <tr>
+                <td>나이 <b>:</b> {{ form.age }}</td>
+            </tr>
+            <tr hidden>
+                <td>체중 <b>:</b> {{ form.weight }}</td>
+            </tr>
+            <tr hidden>
+                <td>골격근량 <b>:</b> {{ form.muscle }}</td>
+            </tr>
+            <tr hidden>
+                <td>체지방률 <b>:</b> {{ form.fat }}</td>
+            </tr>
+            <tr>
+                <td>*희망 운동시간</td>
+            </tr>
+            <tr>
+                <td class="mem_ground2">{{ form.hope_time }}</td>
+            </tr>
+            <tr>
+                <td>*운동경력</td>
+            </tr>
+            <tr>
+                <td class="mem_ground2">{{ form.health_career }}</td>
+            </tr>
+        <!--    {{ form }}-->
+        <!--    <tr><td colspan="2">-->
+        <!--        <button type="submit" class="btn btn-info right"> 확인 </button>-->
+        <!--    </td></tr>-->
+        </table>
+        <table id="form_table2">
+            <tr>
+                <td>*특이사항 및 병력</td>
+            </tr>
+            <tr>
+                <td>{{ form.note1 }}</td>
+            </tr>
+            <tr>
+                <td>*운동목적 및 방향</td>
+            </tr>
+            <tr>
+                <td>{{ form.note2 }}</td>
+            </tr>
+            <tr class="empty_list">
+                <td class="empty_btn">
+                    <button type="button" class="btn btn-info" onclick="empty_plus()"> + </button>
+                    <button type="button" class="btn btn-info" onclick="empty_minus()"> - </button>
+                </td>
+                <td id="empty_td1" hidden style="display: block;"><input type="text" id="empty1_id" name="empty1_t" value="">{{ form.empty1 }}<label for="id_empty1"></label></td>
+                <td id="empty_td2" hidden style="display: block;"><input type="text" id="empty2_id" name="empty2_t" value="">{{ form.empty2 }}<label for="id_empty2"></label></td>
+                <td id="empty_td3" hidden style="display: block;"><input type="text" id="empty3_id" name="empty3_t" value="">{{ form.empty3 }}<label for="id_empty3"></label></td>
+                <td id="empty_td4" hidden style="display: block;"><input type="text" id="empty4_id" name="empty4_t" value="">{{ form.empty4 }}<label for="id_empty4"></label></td>
+                <td id="empty_td5" hidden style="display: block;"><input type="text" id="empty5_id" name="empty5_t" value="">{{ form.empty5 }}<label for="id_empty5"></label></td>
+            </tr>
+            <tr class="alarm">
+                <td class="alarm_title">
+                    <div>
+                        <p style="display: inline-block;">*알림</p>
+                        {{ form.alarm_check }}
+                        <label for="id_alarm_check"></label>
+                    </div>
+                </td>
+                <td hidden><input type="text" name="empty_count" id="empty_count" value="0"></td>
+                <td>{{form.alarm}}</td>
+                <script>
+                    var alarm = '{{ alarm_ }}';
+                    if(alarm == 'True'){
+                        document.getElementById('alarm_box').hidden = false;
+                    }
+                </script>
+            </tr>
+            <script>
+                var empty = '{{ empty }}';
+                empty = JSON.parse(empty.replace(/&#x27;/g, '"').replace(/None/g, '""'));
+                if(empty.length == 0){
+                    empty = [0]
+                }else{
+                    empty[0] = parseInt(empty[0]);
+                    document.getElementById("empty_count").value = String(empty[0]);
+                    for (let i = 1; i <= empty[0]; i++){
+                        document.getElementById("empty_td"+i).hidden = false;
+                    }
+                    for (let i = 1; i <= 5; i++){
+                        document.getElementById("empty"+i+"_id").value = String(empty[i]);
+                    }
+                };
+
+                function empty_plus(){
+                    if(empty[0] < 5){
+                        empty[0] = empty[0]+1;
+                    }
+                    for (let i = 1; i <= empty[0]; i++){
+                        document.getElementById("empty_td"+i).hidden = false;
+                    }
+                    document.getElementById("empty_count").value = String(empty[0]);
+                };
+
+                function empty_minus(){
+                    if(empty[0] > 0){
+                        empty[0] = empty[0]-1;
+                    }
+                    for (let i = 5; i > empty[0]; i--){
+                        document.getElementById("empty_td"+i).hidden = true;
+                    }
+
+                    document.getElementById("empty_count").value = String(empty[0]);
+                };
+
+            </script>
+        </table>
+    </fieldset>
+    <a hidden>{{ form.end_date }}</a>
+    <a hidden>{{ form.account }}</a>
+    <a hidden>{{ form.re_data }}</a>
+
+    <div id="chart_edit" hidden>
+        <div class="chart_form_name left">
+            <div><b>체중</b><p class="right">(kg)</p></div>
+            <div><b>골격근량</b><p class="right">(kg)</p></div>
+            <div><b>체지방률</b><p class="right">(%)</p></div>
+            <div style="text-align: center;">날짜</div>
+        </div>
+
+        <div id="chart_width_edit" class="chart_form_main left">
+            <div id="weight_line_edit" style="width: 100%; height: 40px">
+                <script>
+                    var chart_weight = "{{ weight_data }}";
+                    chart_weight = JSON.parse(chart_weight.replace(/'/g, '"'));
+
+                    if (chart_weight.length >= 12){
+                        chart_weight.push(null);
+                    }else{
+                        for (let i = 0; i < 14; i++){
+                            if (chart_weight.length < 12){
+                                chart_weight.push(null);
+                            }
+                        }
+                    };
+
+                    for (var i=0; i < chart_weight.length; i++ ){
+                        if (chart_weight[i] != null){
+                            document.write("<div class='chart_data'><input name='wei_"+i+"' type='text' value="+chart_weight[i]+"></div>");
+                        }
+                        else{
+                            document.write("<div class='chart_data'><input name='wei_"+i+"' type='text'></div>");
+                        }
+                    }
+                </script>
+            </div>
+            <div id="muscle_line_edit" style="width: 100%; height: 40px;">
+                <script>
+                    var chart_muscle = "{{ muscle_data }}";
+                    chart_muscle = JSON.parse(chart_muscle.replace(/'/g, '"'));
+
+                    if (chart_muscle.length >= 12){
+                        chart_muscle.push(null);
+                    }else{
+                        for (let i = 0; i < 14; i++){
+                            if (chart_muscle.length < 12){
+                                chart_muscle.push(null);
+                            }
+                        }
+                    };
+
+                    for (var i=0; i < chart_muscle.length; i++ ){
+                        if (chart_muscle[i] != null){
+                            document.write("<div class='chart_data'><input name='mus_"+i+"' type='text' value="+chart_muscle[i]+"></div>");
+                        }
+                        else{
+                            document.write("<div class='chart_data'><input name='mus_"+i+"' type='text'></div>");
+                        }
+                    }
+                </script>
+            </div>
+            <div id="fat_line_edit" style="width: 100%; height: 40px;">
+                <script>
+                    var chart_fat = "{{ fat_data }}";
+                    chart_fat = JSON.parse(chart_fat.replace(/'/g, '"'));
+
+                    if (chart_fat.length >= 12){
+                        chart_fat.push(null);
+                    }else{
+                        for (let i = 0; i < 14; i++){
+                            if (chart_fat.length < 12){
+                                chart_fat.push(null);
+                            }
+                        }
+                    };
+
+                    for (var i=0; i < chart_fat.length; i++ ){
+                        if (chart_fat[i] != null){
+                            document.write("<div class='chart_data'><input name='fat_"+i+"' type='text' value="+chart_fat[i]+"></div>");
+                        }
+                        else{
+                            document.write("<div class='chart_data'><input name='fat_"+i+"' type='text'></div>");
+                        }
+                    }
+                </script>
+            </div>
+            <div id="date_line_edit" style="width: 100%; height: 40px;">
+                <script>
+                    var date_data = '{{ wmf_date }}';
+                    date_data = JSON.parse(date_data.replace(/&#x27;/g, '"'));
+
+                    if (date_data.length >= 12){
+                        date_data.push(null);
+                    }else{
+                        for (let i = 0; i < 14; i++){
+                            if (date_data.length < 12){
+                                date_data.push(null);
+                            }
+                        }
+                    };
+
+                    for (var i=0; i < date_data.length; i++ ){
+                        if (date_data[i] != null){
+                            document.write("<div class='chart_date_date'><pre class='date_pre'>" + date_data[i].substr(0, 4) + "\n" + date_data[i].substr(5) + "</pre><input onchange='getObject(this);' name='date_"+i+"' type='date' value="+date_data[i]+"></div>");
+                        }
+                        else{
+                            document.write("<div class='chart_date_date'><input onchange='getObject(this);' name='date_"+i+"' type='date'><pre class='date_pre'></pre></div>");
+                        }
+                    };
+
+                    function getObject(object)
+                    {
+                      document.getElementsByClassName("date_pre")[object.name.substr(5)].innerText=object.value.substr(0, 4) + "\n" + object.value.substr(5);
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
 </form>
+
+<div id="chart_form" class="chart_form" style="float: none;">
+    <div class="chart_form_name left">
+        <div><b class="left">체중</b><p>(kg)</p></div>
+        <div><b class="left">골격근량</b><p>(kg)</p></div>
+        <div><b class="left">체지방률</b><p>(%)</p></div>
+        <div style="text-align: center;">날짜</div>
+    </div>
+
+    <div id="chart_width" class="chart_form_main left">
+        <div id="weight_line" class="chart_form_main1">
+            <div class="weight_chart"></div>
+        </div>
+        <div id="muscle_line" class="chart_form_main1">
+            <div class="muscle_chart"></div>
+        </div>
+        <div id="fat_line" class="chart_form_main1">
+            <div class="fat_chart"></div>
+        </div>
+        <div id="date_line" style="width: 100%; height: 80px;">
+            <script>
+                var date_data = '{{ wmf_date }}';
+                date_data = JSON.parse(date_data.replace(/&#x27;/g, '"'));
+
+                if (date_data.length > 12){
+                    date_data.push(null);
+                }else{
+                    for (let i = 0; i < 14; i++){
+                        if (date_data.length < 12){
+                            date_data.push(null);
+                        }
+                    }
+                };
+
+                for (var i=0; i < date_data.length; i++ ){
+                    if (date_data[i] != null){
+                        document.write("<div class='chart_date_date'><pre style='margin: 1em 0;'>" + date_data[i].substr(0, 4) + "\n" + date_data[i].substr(5) + "</pre></div>");
+                    }
+                    else{
+                        document.write("<div class='chart_date_date'></div>");
+                    }
+                };
+            </script>
+        </div>
+    </div>
+</div>
 
 {% if calendar %}
     <div class="clearfix">
@@ -49,15 +468,50 @@
             {% csrf_token %}
             <input class="btn btn-info right" type="submit" value=">">
         </form>
-<!--        <a class="btn btn-info left" href="{% url 'cal:event_mem_edit' id %}?{{ prev_month2 }}"> < </a>-->
-<!--        <a class="btn btn-info right" href="{% url 'cal:event_mem_edit' id %}?{{ next_month2 }}"> > </a>-->
-<!--        <a class="btn btn-info right" href="{% url 'cal:event_new' %}"> 일정 추가 </a>-->
-<!--        <form action="{% url 'cal:event_new' %}" method="get">-->
-<!--            <input type="hidden" name="name" value="{{ name }}">-->
-<!--        </form>-->
     </div>
     {{ calendar }}
 {% endif %}
+
+<table></table>
+
+<script>
+    var re_data = "{{ re_data }}";
+    re_data = JSON.parse(re_data.replace(/&#x27;/g, '"').replace(/None/g, '""'));
+    var header = ['회원권 시작일', '회원권 종료일', '헬스 시작일', '헬스 종료일', '수업 시작일', '수업 종료일', '등록 구분', '결제 방식', '횟수', '금액', '식단 진행']
+
+    if(re_data != []){
+        if(typeof(re_data[0]) == 'string'){
+            document.write("<table class='re_data_table'>");
+
+            for (var i=0; i < re_data.length; i++ ){
+                document.write("<tr>");
+                document.write("<td>" + header[i] + " <b>:</b> " +re_data[i] + "</td>");
+                document.write("</tr>");
+            }
+
+            document.write("</table>");
+        }else{
+            document.write("<div class='re_scroll'>");
+            document.write("<table class='re_data_table'>");
+            for (var i=0; i < re_data.length; i++ ){
+                document.write("<tr>");
+
+                for (var ii=0; ii < re_data[i].length; ii++ ){
+
+                    document.write("<td>" + header[ii] + " <b>:</b> " +re_data[i][ii] + "</td>");
+
+                }
+                document.write("</tr>");
+
+            }
+            document.write("</table>");
+            document.write("</div>");
+        }
+    }
+</script>
+
+
+
 
 <!--{% for schedule in schedule_list %}-->
 <!--    <div class="clearfix">-->
@@ -70,5 +524,216 @@
 <!--        </form>-->
 <!--    </div>-->
 <!--{% endfor %}-->
+<script>
+    var chart_weight = "{{ weight_data }}";
+    if(chart_weight != '[]'){
+        chart_weight = JSON.parse(chart_weight.replace(/'/g, '"'));
+        var weight_max = Math.max(...chart_weight)*1.2;
+        var weight_min = Math.min(...chart_weight)-0.8;
+        chart_weight.unshift('data1');
+
+        var chart_muscle = "{{ muscle_data }}";
+        chart_muscle = JSON.parse(chart_muscle.replace(/'/g, '"'));
+        var muscle_max = Math.max(...chart_muscle)*1.2;
+        var muscle_min = Math.min(...chart_muscle)-0.8;
+        chart_muscle.unshift('data1');
+
+        var chart_fat = "{{ fat_data }}";
+        chart_fat = JSON.parse(chart_fat.replace(/'/g, '"'));
+        var fat_max = Math.max(...chart_fat)*1.3;
+        var fat_min = Math.min(...chart_fat)-0.8;
+        chart_fat.unshift('data1');
+
+        if (chart_weight.length > 12){
+            chart_weight.push(null);
+            chart_muscle.push(null);
+            chart_fat.push(null);
+        }
+
+        for (let i = 0; i < 14; i++){
+            if (chart_weight.length < 13){
+                chart_weight.push(null);
+            }
+            if (chart_muscle.length < 13){
+                chart_muscle.push(null);
+            }
+            if (chart_fat.length < 13){
+                chart_fat.push(null);
+            }
+        }
+
+        var user = navigator.userAgent;
+        var is_mobile = false;
+        if( user.indexOf("iPhone") > -1 || user.indexOf("Android") > -1 ) {
+            is_mobile = true;
+            m_width = window.innerWidth || document.body.clientWidth
+        }
+
+        var length = chart_weight.length - 13;
+
+        if(is_mobile == false){
+            if(length > 0){
+                var add_width = length*63.75+765
+                document.getElementById('weight_line').style.width = add_width + 'px';
+                document.getElementById('muscle_line').style.width = add_width + 'px';
+                document.getElementById('fat_line').style.width = add_width + 'px';
+                document.getElementById('date_line').style.width = add_width + 'px';
+                document.getElementById('chart_width').scrollLeft = add_width;
+
+                document.getElementById('weight_line_edit').style.width = add_width + 'px';
+                document.getElementById('muscle_line_edit').style.width = add_width + 'px';
+                document.getElementById('fat_line_edit').style.width = add_width + 'px';
+                document.getElementById('date_line_edit').style.width = add_width + 'px';
+                document.getElementById('chart_width_edit').scrollLeft = add_width;
+            }
+        }else{
+            if(length > 0){
+                var add_width = (chart_weight.length-1)*41
+                document.getElementById('weight_line').style.width = add_width + 'px';
+                document.getElementById('muscle_line').style.width = add_width + 'px';
+                document.getElementById('fat_line').style.width = add_width + 'px';
+                document.getElementById('date_line').style.width = add_width + 'px';
+                document.getElementById('chart_width').scrollLeft = add_width;
+
+                document.getElementById('weight_line_edit').style.width = add_width + 'px';
+                document.getElementById('muscle_line_edit').style.width = add_width + 'px';
+                document.getElementById('fat_line_edit').style.width = add_width + 'px';
+                document.getElementById('date_line_edit').style.width = add_width + 'px';
+                document.getElementById('chart_width_edit').scrollLeft = add_width;
+            }
+        }
+
+        var chart = c3.generate({
+            bindto: '.weight_chart',
+            data: {
+                labels: true,
+                columns: [
+                    chart_weight
+                ]
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+            },
+            axis: {
+                x: {
+                    show: false,
+                    type: 'category',
+                },
+                y: {
+                    show: false,
+                    max: weight_max, //최대값
+                    min: weight_min, //최소값
+                    padding: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    tick: {
+                        count: 6
+                    }
+                },
+
+            },
+            tooltip: { // 툴팁 여부
+                show: false
+            },
+            legend: { //범례여부
+                show: false
+            },
+            color: {
+                pattern: ['black']
+            }
+        });
+
+        var chart = c3.generate({
+            bindto: '.muscle_chart',
+            data: {
+                labels: true,
+                columns: [
+                    chart_muscle
+                ]
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+            },
+            axis: {
+                x: {
+                    show: false,
+                    type: 'category',
+                    categories: ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7']
+                },
+                y: {
+                    show: false,
+                    max: muscle_max, //최대값
+                    min: muscle_min, //최소값
+                    padding: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    tick: {
+                        count: 6
+                    }
+                },
+
+            },
+            tooltip: { // 툴팁 여부
+                show: false
+            },
+            legend: { //범례여부
+                show: false
+            },
+            color: {
+                pattern: ['black']
+            }
+        });
+
+        var chart = c3.generate({
+            bindto: '.fat_chart',
+            data: {
+                labels: true,
+                columns: [
+                    chart_fat
+                ]
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+            },
+            axis: {
+                x: {
+                    show: false,
+                    type: 'category',
+                    categories: ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7']
+                },
+                y: {
+                    show: false,
+                    max: fat_max, //최대값
+                    min: fat_min, //최소값
+                    padding: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    tick: {
+                        count: 6
+                    }
+                },
+
+            },
+            tooltip: { // 툴팁 여부
+                show: false
+            },
+            legend: { //범례여부
+                show: false
+            },
+            color: {
+                pattern: ['black']
+            }
+        });
+    }
+</script>
 
 {% endblock %}

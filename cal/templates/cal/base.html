@@ -11,36 +11,71 @@
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
     crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{% static 'cal/css/styles.css' %}?after3">
+  <link rel="stylesheet" type="text/css" href="{% static 'cal/css/styles.css' %}?after">
+  <script src="{% static 'bootstrap.min.js' %}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css"/>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
   <title>회원 관리</title>
 </head>
 <body>
 
   <h1 class="title">{% block title %}{% endblock %}</h1>
-  <hr>
-
-  {% block content %}
-  {% endblock %}
+  <hr style="margin:auto;">
+  <!-- 네비게이션바 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+            {% if not user.is_authenticated %}
+                <a class="navbar-brand" href="{% url 'cal:main' %}">메인</a>
+            {% else %}
+                <a class="navbar-brand" href="{% url 'cal:calendar' %}">{{ user.username }}</a>
+            {% endif %}
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if not user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/accounts/login">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/accounts/signup">회원가입</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cal:option' %}">옵션</a>
+                        </li>
+                        <li class="nav-item">
+                            {% csrf_token %}
+                            <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
   {% if not user.is_authenticated %}
-      <ul class='nav navbar-nav navbar-right'>
-          <a class="btn btn-warning my-2 my-sm-0" href = '/accounts/login' style="font-weight: bold">로그인</a>
-      </ul>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <ul class='nav navbar-nav navbar-right'>
-          <a class="btn btn-outline-warning my-2 my-sm-0" href = '/accounts/signup'>회원가입</a>
-      </ul>
-      &nbsp;&nbsp;&nbsp;&nbsp;
+    <div style="width: 230px; margin-left: auto; margin-right: auto; margin-top:100px;">
+        <label style="font-size: 20px;">로그인 후 사용해 주세요.</label>
+    </div>
+<!--    <div class="login_form">-->
+<!--      <div class="login_btn">-->
+<!--        <a class="btn btn-info" href = '/accounts/login' style="width: 100px;">로그인</a>-->
+<!--      </div>-->
+<!--      <div class="login_btn">-->
+<!--        <a class="btn btn-info" href = '/accounts/signup' style="width: 100px;">회원가입</a>-->
+<!--      </div>-->
+<!--    </div>-->
   {% else %}
-<!--      <ul class='nav navbar-nav navbar-right'>-->
-<!--          <a class="btn btn-warning my-2 my-sm-0" href='/accounts/logout' style="font-weight: bold">로그아웃</a>-->
-<!--      </ul>-->
-      <form method="POST" action="{% url 'accounts:logout' %}">
-          {% csrf_token %}
-          <input class="btn btn-primary" type="submit" value="로그인">
-        </form>
-      &nbsp;&nbsp;&nbsp;&nbsp;
+    {% block content %}
+    {% endblock %}
   {% endif %}
-
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -49,6 +84,20 @@
     crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+  <script>
+    $('ul.select li').click(function(e){
+      var item = $(e.target);
+      item.addClass('selected');
+      item.siblings().removeClass('selected');
+
+      var list = new Array();
+      $("input[name=sc_time]").each(function(index, item2){
+         list.push($(item2).val(item.text()));
+      });
+
+<!--      $('#events').val(item.text());-->
+    });
+  </script>
 
   {% block script %}
   {% endblock %}

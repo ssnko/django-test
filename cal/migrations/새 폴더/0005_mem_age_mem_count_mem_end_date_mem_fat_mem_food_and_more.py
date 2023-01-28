@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("cal", "0004_event_name_id"),
+        ("accounts", "0004_event_name_id"),
     ]
 
     operations = [

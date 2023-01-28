@@ -19,8 +19,26 @@ ul {
   margin-top:5px;
 }
 
+.t_c{
+    text-align: center;
+}
+
 .right {
   float: right;
+}
+
+.login_form {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+.login_btn {
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
 }
 
 .btn {
@@ -101,7 +119,8 @@ a {
     .date {
       font-size: 10px;
       text-align: center;
-      padding: 20px 0px 0px 35%;
+      padding-left: 38%;
+      padding-right: 38%;
     }
 
     .mem_list {
@@ -116,8 +135,8 @@ a {
 
         font-size: 10px;
         text-align: center;
-        padding-left: 35%;
-        padding-right: 41%;
+        padding-left: 38%;
+        padding-right: 38%;
     }
 
     .schedule_list{
@@ -131,6 +150,356 @@ a {
         background: none;
         padding-left: 2px;
         max-height: 12px;
+    }
+
+    .sc_list{
+        width: 90%;
+        margin: auto;
+    }
+
+    .sc_cen{
+        font-size: 20px;
+        height: 30px;
+        text-align: center;
+        border: 1px solid #17a2b8;
+        margin: 0px;
+    }
+
+    ul.select {
+        width:25%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    ul.select li {
+       font-size: 20px;
+       text-align: center;
+       height: 30px;
+       border: 1px solid #17a2b8;
+    }
+
+    ul.select li.selected {
+       background-color: #17a2b8;
+       color: white;
+    }
+
+    ul.select2 {
+        width:25%;
+        margin-left: 10px;
+        padding: 0px;
+    }
+
+    ul.select2 li {
+       font-size: 20px;
+       text-align: center;
+       height: 30px;
+       border: 1px solid #17a2b8;
+       margin-bottom: 5px;
+       border-radius: 5px;
+    }
+
+    ul.select2 li.selected {
+       background-color: #17a2b8;
+       color: white;
+    }
+
+    .mem_ground {
+        width: 95%;
+        margin: auto;
+    }
+
+    .mem_ground table{
+        width: 50%;
+        margin: auto;
+    }
+
+    .mem_ground input{
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 40%;
+        height: 20px;
+    }
+
+    .mem_name input{
+        font-size: 16px;
+        font-weight: 900;
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 30%;
+        height: 20px;
+    }
+
+    .mem_phone input{
+        font-size: 16px;
+        font-weight: 900;
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 65%;
+        height: 20px;
+    }
+
+    .mem_cs1 input{
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 55%;
+        height: 20px;
+    }
+
+    .mem_ground textarea{
+        background: none;
+        outline: none;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 100%;
+        height: 170px;
+        resize: none;
+    }
+
+    .mem_ground2 textarea{
+        background: none;
+        outline: none;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 100%;
+        height: 85px;
+        resize: none;
+    }
+
+    .empty_list{
+        border-radius: 5px;
+        margin-bottom: 5px;
+        display: inline-block;
+        width: 100%;
+        height: 180px;
+        padding: auto;
+    }
+
+    .empty_list button{
+        width: 80px;
+        margin: auto;
+    }
+
+    .empty_list input{
+        width: 70%;
+    }
+
+    .alarm_title{
+        display: block;
+        width: 100%;
+        height: 30px;
+    }
+
+    .alarm {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .alarm textarea{
+        background: none;
+        outline: none;
+        border-radius: 5px;
+
+        width: 100%;
+        height: 70px;
+        resize: none;
+    }
+
+    .alarm_box{
+        width: 70%;
+        height: 200px;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        position:absolute;
+        background-color: white;
+        left: 15%;
+        top: 100px;
+    }
+
+    .alarm_box button{
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+    }
+
+    input[type="checkbox"]{
+        display: none;
+    }
+    input[type="checkbox"] + label{
+        width: 20px;
+        height: 20px;
+        border: 2px solid #bcbcbc;
+        margin-left: 5px;
+        margin-top: 0;
+        margin-bottom: -3px;
+        margin-right: 0;
+    }
+    input[id="id_empty1"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty2"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty3"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty4"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty5"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_alarm_check"]:checked + label {
+        background-color: #17a2b8;
+    }
+
+    .chart_form{
+        width: 95%;
+        height: 160px;
+        margin: auto;
+    }
+
+    .chart_form_name{
+        width: 16%;
+        height: 160px;
+        margin-left: auto;
+    }
+
+    .chart_form_name div{
+        border: 1px solid black;
+        width: 100%;
+        height: 40px;
+        font-size: 10px;
+        line-height : 40px;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .chart_form_main{
+        border: 1px solid black;
+        width: 84%;
+        height: 160px;
+        white-space: nowrap;
+        position: relative;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+    .chart_form_main1{
+        width: 100%;
+        height: 40px;
+        font-size: 10px;
+    }
+
+    .chart_form_main1 div{
+        border: 1px solid black;
+        width: 100%;
+        height: 100%;
+        font-size: 10px;
+        display: inline-block;
+    }
+
+    .c3-chart-text text
+    {
+        font-size: 10px;
+    }
+/*
+    .chart_date{
+        border: 1px solid black;
+        width: 95%;
+        height: 30px;
+        margin-left: 60px;
+    }
+
+    .chart_date_name{
+        border: 1px solid black;
+        width: 15%;
+        height: 100%;
+        line-height : 30px;
+        text-align: center;
+    }
+*/
+    .chart_data{
+        border-left: 0px solid grey;
+        border-right: 1px solid grey;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        width: 41px;
+        height: 40px;
+        border-left-style: dashed;
+        border-right-style: dashed;
+        font-size: 10px;
+        text-align: center;
+        float: left;
+        display: inline-block;
+    }
+
+    .chart_date_date{
+        border-left: 0px solid grey;
+        border-right: 1px solid grey;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        width: 41px;
+        height: 40px;
+        border-left-style: dashed;
+        border-right-style: dashed;
+        font-size: 10px;
+        text-align: center;
+        float: left;
+        display: inline-block;
+    }
+
+    .chart_data input{
+        width: 80%;
+        height: 25px;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        margin-top: 7px;
+        text-align: center;
+    }
+
+    .chart_date_date input{
+        width: 80%;
+        height: 80%;
+        border: 1px solid #17a2b8;
+        position: relative;
+        -webkit-appearance: none;
+    }
+
+    .chart_date_date input::-webkit-inner-spin-button,
+    .chart_date_date input::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
+
+    .chart_date_date pre{
+        position: absolute;
+        margin-left: 8px;
+    }
+
+    .chart_edit{
+        border-right: 2px solid black;
+        width: 135px;
+        height: 80px;
+        font-size: 18px;
+        line-height : 80px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
 }
@@ -148,7 +517,7 @@ a {
 
     .calendar {
       width: 1000px;
-      margin-left: 1%;
+      margin: auto;
       font-size: 13px;
     }
 
@@ -174,7 +543,10 @@ a {
 
     .date {
       font-size: 16px;
-      padding: 20px 0px 0px 5px;
+      text-align: center;
+
+      padding-left: 42%;
+      padding-right: 42%;
     }
 
     .mem_list {
@@ -186,13 +558,11 @@ a {
     .circle{
         background-color: #ff7f00;
         color: black;
-        border-radius: 50%;
 
-        width: 50px;
-        height: 50px;
-        font-size: 16px;
+        font-size: 17px;
         text-align: center;
-        line-height: 50px;
+        padding-left: 42%;
+        padding-right: 42%;
     }
 
     .schedule_list{
@@ -207,4 +577,461 @@ a {
         padding-left: 2px;
     }
 
+    .sc_list{
+        width: 1000px;
+        margin-left: 15px;
+    }
+
+    .sc_cen{
+        font-size: 20px;
+        height: 70px;
+        text-align: center;
+        border: 1px solid #17a2b8;
+        margin: 0px;
+    }
+
+    ul.select {
+        width:25%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    ul.select li {
+       font-size: 20px;
+       text-align: center;
+       height: 70px;
+       border: 1px solid #17a2b8;
+    }
+
+    ul.select li.selected {
+       background-color: #17a2b8;
+       color: white;
+    }
+
+    .select_left {
+        line-height : 70px;
+    }
+
+    ul.select2 {
+        width:25%;
+        margin-left: 10px;
+        padding: 0px;
+        /*position: fixed;*/
+        left: 730px;
+    }
+
+    ul.select2 li {
+       font-size: 20px;
+       text-align: center;
+       height: 50px;
+       border: 1px solid #17a2b8;
+       margin-bottom: 5px;
+       border-radius: 5px;
+    }
+
+    ul.select2 li.selected {
+       background-color: #17a2b8;
+       color: white;
+    }
+
+    .mem_ground {
+        width: 1000px;
+        margin: auto;
+    }
+
+    .mem_ground table{
+        margin-right: 50px;
+    }
+
+    .mem_ground input{
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 120px;
+        height: 25px;
+    }
+
+    .mem_name input{
+        font-size: 20px;
+        font-weight: 900;
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 80px;
+        height: 30px;
+    }
+
+    .mem_phone input{
+        font-size: 20px;
+        font-weight: 900;
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 180px;
+        height: 30px;
+    }
+
+    .mem_cs1 input{
+        background: none;
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 150px;
+        height: 25px;
+    }
+
+    .mem_ground select{
+        outline: none;
+        border: 0px solid #17a2b8;
+        border-radius: 5px;
+        width: 60px;
+        height: 25px;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .mem_ground select::-ms-expand {
+        display: none;
+    }
+    /*
+    .mem_ground input[type="date"]::-webkit-inner-spin-button,
+    .mem_ground input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
+    */
+    .mem_ground textarea{
+        background: none;
+        outline: none;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 450px;
+        resize: none;
+    }
+
+    .mem_ground2 textarea{
+        background: none;
+        outline: none;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 450px;
+        height: 115px;
+        resize: none;
+    }
+
+    .empty_list{
+        display: inline-block;
+        width: 150px;
+        height: 230px;
+    }
+
+    .empty_list button{
+        width: 70px;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+
+    .alarm_title{
+        display: block;
+        width: 100%;
+        height: 30px;
+    }
+    .alarm {
+        display: inline-block;
+        width: 280px;
+        margin-left: 20px;
+    }
+    .alarm textarea{
+        background: none;
+        outline: none;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+
+        width: 280px;
+        height: 190px;
+        resize: none;
+    }
+
+    .alarm_box{
+        width: 400px;
+        height: 200px;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        position:absolute;
+        background-color: white;
+        left: 300px;
+        top: 300px;
+    }
+
+    .alarm_box button{
+        width: 100%;
+        height: 100%;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+    }
+
+    .chart_form{
+        width: 1000px;
+        height: 320px;
+        margin: auto;
+    }
+
+    .chart_form_name{
+        width: 135px;
+        height: 320px;
+        margin-left: 60px;
+    }
+
+    .chart_form_name div{
+        border: 1px solid black;
+        width: 100%;
+        height: 80px;
+        font-size: 18px;
+        line-height : 60px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .chart_form_main{
+        border: 1px solid black;
+        width: 765px;
+        height: 340px;
+        white-space: nowrap;
+        position: relative;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+    .chart_form_main1{
+        width: 100%;
+        height: 80px;
+        font-size: 17px;
+    }
+
+    .chart_form_main1 div{
+        border: 1px solid black;
+        width: 100%;
+        height: 100%;
+        font-size: 17px;
+        display: inline-block;
+    }
+
+    .c3-chart-text text
+    {
+        font-size: 16px;
+    }
+
+    .chart_date{
+        border: 1px solid black;
+        width: 900px;
+        height: 30px;
+        margin-left: 60px;
+    }
+
+    .chart_date_name{
+        border: 1px solid black;
+        width: 15%;
+        height: 100%;
+        line-height : 30px;
+        text-align: center;
+    }
+
+    .chart_data{
+        border-left: 0px solid grey;
+        border-right: 1px solid grey;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        width: 63.5px;
+        height: 80px;
+        border-left-style: dashed;
+        border-right-style: dashed;
+        font-size: 16px;
+        text-align: center;
+        float: left;
+        display: inline-block;
+    }
+
+    .chart_date_date{
+        border-left: 0px solid grey;
+        border-right: 1px solid grey;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        width: 63.5px;
+        height: 80px;
+        border-left-style: dashed;
+        border-right-style: dashed;
+        font-size: 16px;
+        text-align: center;
+        float: left;
+        display: inline-block;
+    }
+
+    .chart_data input{
+        width: 55px;
+        height: 25px;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        margin-top: 27px;
+        text-align: center;
+    }
+
+    .chart_date_date input::-webkit-calendar-picker-indicator {
+      padding-left: 35px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      opacity: 0;
+    }
+
+    .chart_date_date input{
+        width: 55px;
+        height: 70px;
+        border: 1px solid #17a2b8;
+        position: relative;
+    }
+
+    .date_pre{
+        position: absolute;
+        bottom: 10px;
+        margin-left: 10px;
+    }
+
+    .chart_edit{
+        border-right: 2px solid black;
+        width: 135px;
+        height: 80px;
+        font-size: 18px;
+        line-height : 80px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    input[type="checkbox"]{
+        display: none;
+    }
+    input[type="checkbox"] + label{
+        width: 20px;
+        height: 20px;
+        border: 2px solid #bcbcbc;
+        margin-left: 5px;
+        margin-top: 0;
+        margin-bottom: -3px;
+        margin-right: 0;
+    }
+    input[id="id_empty1"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty2"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty3"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty4"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_empty5"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_alarm_check"]:checked + label {
+        background-color: #17a2b8;
+    }
+
+    .re_data_table{
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .re_data_table tr{
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
+        margin-left: 10px;
+        display: inline-block;
+    }
+
+    .re_data_table td{
+        margin-left: 5px;
+        display: block;
+        width:220px;
+        height:50px;
+        line-height : 50px;
+    }
+
+    .re_scroll{
+        width: 1000px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+}
+
+.toggle {
+  --width: 80px;
+  --height: calc(var(--width) / 3);
+
+  position: relative;
+  display: inline-block;
+  width: var(--width);
+  height: var(--height);
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggle .labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.toggle .labels::after {
+  content: attr(data-off);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  transition: all 0.4s ease-in-out;
+  border: 1px solid #17a2b8;
+}
+
+.toggle .labels::before {
+  content: attr(data-on);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: calc(var(--width) * -1);
+  height: 100%;
+  width: 100%;
+  color: #4d4d4d;
+  background-color: #f19999;
+  text-align: center;
+  transition: all 0.4s ease-in-out;
+}
+
+.toggle input:checked~.labels::after {
+  transform: translateX(var(--width));
+}
+
+.toggle input:checked~.labels::before {
+  transform: translateX(var(--width));
 }

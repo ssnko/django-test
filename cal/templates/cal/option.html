@@ -1,0 +1,76 @@
+{% extends 'cal/base.html' %}
+
+{% block title %}
+<!--회원 목록-->
+{% endblock %}
+
+{% block content %}
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                {{ field.label }} <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ field.label }} <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+        <div class="clearfix">
+            <button class="btn btn-info left" type="button" onclick="history.back();"> << </button>
+            <button type="submit" class="btn btn-info right" id="form_submit"> 저장 </button>
+        </div>
+    <table class="form form-table option">
+        <tr>
+            <td>체크 리스트 : </td>
+            <td>{{ form.empty1 }}</td>
+        </tr>
+        <tr>
+            <td>체크 리스트 : </td>
+            <td>{{ form.empty2 }}</td>
+        </tr>
+        <tr>
+            <td>체크 리스트 : </td>
+            <td>{{ form.empty3 }}</td>
+        </tr>
+        <tr>
+            <td>체크 리스트 : </td>
+            <td>{{ form.empty4 }}</td>
+        </tr>
+        <tr>
+            <td>체크 리스트 : </td>
+            <td>{{ form.empty5 }}</td>
+        </tr>
+        <tr><td></td></tr>
+        <tr>
+            <td class="t_c" style="border: 1px solid red;" colspan="2">*횟수 별 금액</td>
+        </tr>
+        <tr>
+            <td class="t_c">횟수</td>
+            <td class="t_c">금액</td>
+        </tr>
+        <script>
+            var weight = "{{ weight }}";
+            weight = JSON.parse(weight.replace(/&#x27;/g, '"'));
+
+            for (var i=0; i < weight[0].length; i++ ){
+                document.write("<tr>");
+                document.write('<td><input name="count_'+ i +'" type="number" class="t_c" value="'+weight[0][i]+'"></td>');
+                document.write('<td><input name="money_'+ i +'" type="number" class="t_c" value="'+weight[1][i]+'"></td>');
+                document.write("</tr>");
+            }
+        </script>
+        <tr hidden><td>{{ form.account }}</td></tr>
+        <tr hidden><td>{{ form.count }}</td></tr>
+        <tr hidden><td>{{ form.count_money }}</td></tr>
+    </table>
+</form>
+
+{% endblock %}
