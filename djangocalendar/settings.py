@@ -28,10 +28,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = ['https://port-0-django-test-883524lbxl6zn6.gksl2.cloudtype.app']
-<<<<<<< HEAD
-
-=======
->>>>>>> 8999942a8b717021810cda123a487753fd609806
+# <<<<<<< HEAD
+#
+# =======
+# >>>>>>> 8999942a8b717021810cda123a487753fd609806
 
 # Application definition
 
@@ -131,7 +131,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
 ACCOUNT_SESSION_REMEMBER = True  # 브라우저를 닫아도 세션기록 유지! [ 로그인 안풀리게 ! ]
 SESSION_COOKIE_AGE = 864000  # 쿠키를 한시간만 저장 [ 세션 ]
@@ -147,5 +147,5 @@ LOGOUT_REDIRECT_URL = '/accounts/login'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-=======
->>>>>>> 8999942a8b717021810cda123a487753fd609806
+# =======
+# >>>>>>> 8999942a8b717021810cda123a487753fd609806
