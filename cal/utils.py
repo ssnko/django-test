@@ -63,7 +63,15 @@ class Calendar(HTMLCalendar):
 		# events = Event.objects.filter(time__year=self.year, time__month=self.month)
 
 		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
-		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
+
+		s = '%s년 %s월' % (self.year, self.month)
+		cal += '''<tr>
+		    <th style="width: 70px;"></th>
+		    <th colspan="9" class="month cal_line">%s</th>
+		</tr>\n
+		''' % s
+
+		# cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
 		# accounts += f'{self.formatweekheader()}\n'
 		cal += '''<tr><th></th><th class="sun cal_line">일</th><th class="mon cal_line">월</th><th class="tue cal_line">화</th><th class="wed cal_line">수</th><th class="thu cal_line">목</th><th class="fri cal_line">금</th><th class="sat cal_line">토</th>
 			<th class="cal_line" style="width: 70px;"><a>수업</a></th>
