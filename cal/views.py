@@ -134,19 +134,24 @@ class CalendarView2(generic.ListView, ModelFormMixin):
             self.re_data = []
 
         # 횟수당 금액 불러오는곳
-        op_id = Option.objects.filter(account=user_name).values_list('id', flat=True)[0]
-        op_instance = Option.objects.get(pk=op_id)
+        if len(Option.objects.filter(account=user_name)) != 0:
+            op_id = Option.objects.filter(account=user_name).values_list('id', flat=True)[0]
+            op_instance = Option.objects.get(pk=op_id)
+
+            option = Option.objects.filter(account=user_name).values()
+            if len(option) != 0:
+                self.option_ = [option[0]['count'], option[0]['empty1'], option[0]['empty2'], option[0]['empty3'],
+                                option[0]['empty4'], option[0]['empty5']]
+            else:
+                self.option_ = ['0', None, None, None, None, None]
+        else:
+            op_instance = Option()
+            self.option_ = ['0', None, None, None, None, None]
 
         if op_instance.count_money != '':
             self.count = jsonDec.decode(op_instance.count_money)
         else:
             self.count = [['', '', '', '', ''], ['', '', '', '', '']]
-
-        option = Option.objects.filter(account=user_name).values()
-        if len(option) != 0:
-            self.option_ = [option[0]['count'], option[0]['empty1'], option[0]['empty2'], option[0]['empty3'], option[0]['empty4'], option[0]['empty5']]
-        else:
-            self.option_ = ['0', None, None, None, None, None]
 
         self.alarm_ = instance.alarm_check
         self.alarm_text = instance.alarm
@@ -190,6 +195,7 @@ class CalendarView2(generic.ListView, ModelFormMixin):
             self.object.date = date_list
             self.object.save()
 
+            op_instance.account = user_name
             op_instance.count = request.POST.get('empty_count')
             op_instance.empty1 = request.POST.get('empty1_t')
             op_instance.empty2 = request.POST.get('empty2_t')
@@ -198,10 +204,13 @@ class CalendarView2(generic.ListView, ModelFormMixin):
             op_instance.empty5 = request.POST.get('empty5_t')
             op_instance.save()
 
-            option = Option.objects.filter(account=user_name).values()
-            if len(option) != 0:
-                self.option_ = [option[0]['count'], option[0]['empty1'], option[0]['empty2'], option[0]['empty3'],
-                                option[0]['empty4'], option[0]['empty5']]
+            if len(Option.objects.filter(account=user_name)) != 0:
+                option = Option.objects.filter(account=user_name).values()
+                if len(option) != 0:
+                    self.option_ = [option[0]['count'], option[0]['empty1'], option[0]['empty2'], option[0]['empty3'],
+                                    option[0]['empty4'], option[0]['empty5']]
+                else:
+                    self.option_ = ['0', None, None, None, None, None]
             else:
                 self.option_ = ['0', None, None, None, None, None]
 
@@ -516,8 +525,11 @@ def main(request):
 
 def option(request):
     user_name = request.user.username
-    id = Option.objects.filter(account=user_name).values_list('id', flat=True)[0]
-    instance = Option.objects.get(pk=id)
+    if len(Option.objects.filter(account=user_name)) != 0:
+        id = Option.objects.filter(account=user_name).values_list('id', flat=True)[0]
+        instance = Option.objects.get(pk=id)
+    else:
+        instance = Option()
 
     form = OptionForm(request.POST or None, instance=instance)
 
@@ -546,6 +558,7 @@ def option(request):
         cm = json.dumps(cm)
 
         com = form.save(commit=False)
+        com.account = user_name
         com.count_money = cm
         com.save()
 

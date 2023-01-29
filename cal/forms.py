@@ -33,20 +33,20 @@ class EventForm(ModelForm):
 
 class MemForm(ModelForm):
   def get_choice(self, account):
-    id = Option.objects.filter(account=account).values_list('id', flat=True)[0]
-    instance = Option.objects.get(pk=id)
+    if len(Option.objects.filter(account=account)) != 0:
+      id = Option.objects.filter(account=account).values_list('id', flat=True)[0]
+      instance = Option.objects.get(pk=id)
+    else:
+      instance = Option()
 
     jsonDec = json.decoder.JSONDecoder()
+    choice = [['', '']]
 
     if instance.count_money != '':
       weight = jsonDec.decode(instance.count_money)
-    else:
-      weight = [['', '', '', '', ''], ['', '', '', '', '']]
-
-    choice = [['', '']]
-    for i in range(len(weight[0])):
-      if weight[0][i] != '':
-        choice.append((weight[0][i], weight[0][i]))
+      for i in range(len(weight[0])):
+        if weight[0][i] != '':
+          choice.append((weight[0][i], weight[0][i]))
 
     return choice
 
