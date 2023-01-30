@@ -119,11 +119,11 @@
     </div>
     <fieldset id="form_field" disabled>
         {% csrf_token %}
-
         <table id="form_table" style="float: left;">
             <tr>
                 <td class="mem_name">{{ form.name }} <a class="mem_phone">{{ form.phone }}</a></td>
             </tr>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
             <tr>
                 <td class="mem_cs1">등록날짜 <b>:</b> {{ form.start_date|default_if_none:'' }}</td>
             </tr>
@@ -154,7 +154,6 @@
             <tr>
                 <td>횟수 <b>:</b> {{ form.count }}</td>
             </tr>
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
             <script>
                 $(document).ready(function(){
                     $("select[name=count]").change(function () {
@@ -459,7 +458,8 @@
 </div>
 
 {% if calendar %}
-    <div class="clearfix">
+    <div style="width: 100%; height: 100px;"></div>
+    <div class="calender_arrow">
         <form action="{% url 'cal:event_mem_edit' id %}?{{ prev_month2 }}" method="post">
             {% csrf_token %}
             <input class="btn btn-info left" type="submit" value="<">

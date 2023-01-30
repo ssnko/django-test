@@ -21,13 +21,22 @@
         document.write("<a class='btn btn-info left' href='{% url 'cal:calendar' %}'> << </a>");
         document.write('{% endif %}');
     </script>
-    <label class="toggle right">
+
+    <label id="check1" class="toggle right">
         {% if checked %}
             <input type="checkbox" onclick='getCheckboxValue(event)' checked>
         {% else %}
             <input type="checkbox" onclick='getCheckboxValue(event)'>
         {% endif %}
-        <span class="labels" data-on="추가완료" data-off="일정추가"></span>
+        <span class="labels" data-on="회원일정" data-off="회원일정"></span>
+    </label>
+    <label id="check2" class="toggle right">
+        {% if checked %}
+            <input type="checkbox" onclick='getCheckboxValue2(event)' checked>
+        {% else %}
+            <input type="checkbox" onclick='getCheckboxValue2(event)'>
+        {% endif %}
+        <span class="labels" data-on="기타일정" data-off="기타일정"></span>
     </label>
     <script>
         function getCheckboxValue(event)  {
@@ -39,13 +48,41 @@
           }
 
           if (result == ''){
-            document.getElementById("sc_name").style.visibility ='hidden';
+            document.getElementById("sc_name").style.display = "none";
             const element = document.getElementById('name_line');
             element.style.width = '75%';
           }else {
-            document.getElementById("sc_name").style.visibility ='visible';
+            if(document.getElementById("sc_name2").style.display == 'block'){
+                document.getElementById("check2").click();
+            }
+
+            document.getElementById("sc_name").style.display = "block";
             const element = document.getElementById('name_line');
             element.style.width = '45%';
+          }
+        }
+
+        function getCheckboxValue2(event)  {
+          let result = '';
+          if(event.target.checked)  {
+            result = event.target.value;
+          }else {
+            result = '';
+          }
+
+          if (result == ''){
+            document.getElementById("sc_name2").style.display = "none";
+            const element = document.getElementById('name_line');
+            element.style.width = '75%';
+          }else {
+            if(document.getElementById("sc_name").style.display == 'block'){
+                document.getElementById("check1").click();
+            }
+
+            document.getElementById("sc_name2").style.display = "block";
+            const element = document.getElementById('name_line');
+            element.style.width = '45%';
+            console.log(document.getElementById("sc_name").style.display);
           }
         }
     </script>
@@ -76,43 +113,47 @@
         {% for event in event_list %}
             <li class="sc_cen">
                 {% if event %}
-                <form action="{% url 'cal:schedule_edit' event.id %}" method="get" style="height:100%">
+                    <form action="{% url 'cal:schedule_edit' event.id %}" method="get" style="height:100%">
+                        {% csrf_token %}
+                        <script>
+                            var url = new URL(window.location.href);
+                            var year = url.searchParams.get("year");
+                            var month = url.searchParams.get("month");
+                            var day = url.searchParams.get("day");
+                            var id = url.searchParams.get("id");
+
+                            document.write("<input hidden name='year' value='" + year + "'>");
+                            document.write("<input hidden name='month' value='" + month + "'>");
+                            document.write("<input hidden name='day' value='" + day + "'>");
+                            document.write("<input hidden name='id' value='" + id + "'>");
+
+                            var cc = "{{ event.cancel }}";
+
+                            switch(cc){
+                                case 'None':
+                                    document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }}</button>');
+                                    break;
+                                case '차감':
+                                    document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }} {{ event.cancel }}</button>');
+                                    break;
+                                case '취소':
+                                    document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.cancel }}</button>');
+                                    break;
+                            }
+                        </script>
+                    </form>
+                {% else %}
                     {% csrf_token %}
                     <script>
-                        var url = new URL(window.location.href);
-                        var year = url.searchParams.get("year");
-                        var month = url.searchParams.get("month");
-                        var day = url.searchParams.get("day");
-                        var id = url.searchParams.get("id");
-
-                        document.write("<input hidden name='year' value='" + year + "'>");
-                        document.write("<input hidden name='month' value='" + month + "'>");
-                        document.write("<input hidden name='day' value='" + day + "'>");
-                        document.write("<input hidden name='id' value='" + id + "'>");
-
-                        var cc = "{{ event.cancel }}";
-
-                        switch(cc){
-                            case 'None':
-                                document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }}</button>');
-                                break;
-                            case '차감':
-                                document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }} {{ event.cancel }}</button>');
-                                break;
-                            case '취소':
-                                document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.cancel }}</button>');
-                                break;
-                        }
-
+                        document.write("<input hidden name='slot' value='' style='text-align: center; width:100%;height:100%; border: 0px solid;'>");
                     </script>
-                </form>
                 {% endif %}
             </li>
         {% endfor %}
     </ul>
 </div>
 
-<ul class="select2 left" id="sc_name" style="visibility: {{ name_hidden }};">
+<ul class="select2 left" id="sc_name" style="display: {{ name_hidden }};">
     {% for name in name_list %}
         <li>
             <form method="post" style="width: 100%; height: 100%;">
@@ -133,6 +174,15 @@
             </form>
         </li>
     {% endfor %}
+</ul>
+<ul class="select2 left" id="sc_name2" style="display: {{ name_hidden }};">
+    <li>
+        <form method="post" style="width: 100%; height: 100%;">
+            {% csrf_token %}
+            <button type="button" onclick="" style="width: 100%; height: 100%; border: 0px; background: #ffffff; border-radius: 5px; color:black;">확인</button>
+            <div hidden><div></div>{{ form }}</div>
+        </form>
+    </li>
 </ul>
 
 {% endblock %}

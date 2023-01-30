@@ -140,6 +140,8 @@ class CalendarView2(generic.ListView, ModelFormMixin):
 
             option = Option.objects.filter(account=user_name).values()
             if len(option) != 0:
+                if option[0]['count'] == 'NaN':
+                    option[0]['count'] = 0
                 self.option_ = [option[0]['count'], option[0]['empty1'], option[0]['empty2'], option[0]['empty3'],
                                 option[0]['empty4'], option[0]['empty5']]
             else:
@@ -207,6 +209,8 @@ class CalendarView2(generic.ListView, ModelFormMixin):
             if len(Option.objects.filter(account=user_name)) != 0:
                 option = Option.objects.filter(account=user_name).values()
                 if len(option) != 0:
+                    if option[0]['count'] == 'NaN':
+                        option[0]['count'] = 0
                     self.option_ = [option[0]['count'], option[0]['empty1'], option[0]['empty2'], option[0]['empty3'],
                                     option[0]['empty4'], option[0]['empty5']]
                 else:
@@ -399,9 +403,9 @@ def schedule(request):
                 event_list[time_30.index(events[i]['time'].strftime('%H:%M'))] = events[i]
 
         if id != None:
-            return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'visible', 'checked': 'checked', 'name_line_width': '45%'})
+            return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'checked': 'checked', 'name_line_width': '45%'})
         else:
-            return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'visible', 'checked': 'checked', 'name_line_width': '45%'})
+            return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'checked': 'checked', 'name_line_width': '45%'})
 
     for i in range(len(events)):
         full_count = Mem.objects.filter(id=events[i]['name_id']).values()[0]['count']
@@ -419,9 +423,9 @@ def schedule(request):
             event_list[time_30.index(events[i]['time'].strftime('%H:%M'))] = events[i]
 
     if id != None:
-        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'hidden', 'name_line_width': '75%'})
+        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_line_width': '75%'})
     else:
-        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'hidden', 'name_line_width': '75%'})
+        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_line_width': '75%'})
 
 def schedule_add(request):
     year = request.GET.get('year')

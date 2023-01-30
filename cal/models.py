@@ -23,19 +23,23 @@ class Mem(models.Model):
     phone = models.CharField(max_length=200, null=True, blank=True)  # 폰 번호
     start_date = models.DateField(null=True, blank=True)  # 시작일
     end_date = models.DateField(null=True, blank=True)  # 종료일
-
-
     count = models.CharField(max_length=200, blank=True, null=True)  # pt횟수
-    food = models.CharField(max_length=200, null=True, blank=True)  # 식단진행
+
+    food_CHOICES = (
+        ('', ''),
+        ('o', 'o'),
+        ('x', 'x'),
+    )
+    food = models.CharField(max_length=3, blank=True, choices=food_CHOICES, default='')  # 식단진행
     job = models.CharField(max_length=200, null=True, blank=True)  # 직업
     residence = models.CharField(max_length=200, null=True, blank=True)  # 거주
-    stature = models.CharField(max_length=200, null=True, blank=True)  # 키
-    age = models.CharField(max_length=200, null=True, blank=True)  # 나이
+    stature = models.PositiveIntegerField(blank=True, null=True)  # 키
+    age = models.PositiveIntegerField(blank=True, null=True)  # 나이
     weight = models.CharField(max_length=200, null=True, blank=True)  # 체중
     muscle = models.CharField(max_length=200, null=True, blank=True)  # 골격근량
     fat = models.CharField(max_length=200, null=True, blank=True)  # 체지방률
     date = models.CharField(max_length=200, null=True, blank=True)  # 체중/골격근량/체지방률 날짜
-    hope_time = models.TextField(null=True, blank=True)  # 희망 운동시간
+    hope_time = models.CharField(max_length=200, null=True, blank=True)  # 희망 운동시간
     health_career = models.TextField(null=True, blank=True)  # 운동경력
     note1 = models.TextField(null=True, blank=True)  # 특이사항 및 병력
     note2 = models.TextField(null=True, blank=True)  # 운동목적 및 방향
@@ -71,7 +75,7 @@ class Mem(models.Model):
     alarm = models.TextField(null=True, blank=True)  # 알림칸
     alarm_check = models.BooleanField(default=False)  # 비고칸
     # photo = models.FileField(upload_to = 'uploads/', null=True)
-    money = models.CharField(max_length=200, blank=True)  # 금액
+    money = models.PositiveIntegerField(blank=True, null=True)  # 금액
     re_data = models.TextField(blank=True)  # 재 등록시 과거 데이터 저장
 
     @property
