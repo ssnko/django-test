@@ -276,6 +276,9 @@ a {
 
     .mem_ground2 input{
         width: 100%;
+        outline: none;
+        border: 1px solid #17a2b8;
+        border-radius: 5px;
     }
 
     .mem_ground2 textarea{
