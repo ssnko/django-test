@@ -5,13 +5,13 @@
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, maximum-scale=1">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
     crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{% static 'cal/css/styles.css' %}?after2">
+  <link rel="stylesheet" type="text/css" href="{% static 'cal/css/styles.css' %}?after3">
   <script src="{% static 'bootstrap.min.js' %}"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css"/>
   <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -61,8 +61,8 @@
         </div>
     </nav>
   {% if not user.is_authenticated %}
-    <div style="width: 230px; margin-left: auto; margin-right: auto; margin-top:100px;">
-        <label style="font-size: 20px;">로그인 후 사용해 주세요.</label>
+    <div style="width: 100%; margin-left: auto; margin-right: auto; margin-top:100px;">
+        <label style="font-size: 20px; text-align: center;width: 100%;">로그인 후 사용해 주세요.</label>
     </div>
 <!--    <div class="login_form">-->
 <!--      <div class="login_btn">-->

@@ -4,7 +4,11 @@ body {
 }
 
 input:disabled, textarea:disabled, select:disabled, date:disabled {
-  color: black;
+    color: black;
+    -webkit-appearance: none;
+    opacity:1;
+    background-color: white;
+    border: 0px solid;
 }
 
 ul {
