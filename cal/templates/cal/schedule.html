@@ -110,6 +110,9 @@
         {% endfor %}
     </ul>
     <ul id="name_line" class="left" style="padding: 0px; width: {{ name_line_width }};">
+        <script>
+            var event_count = 0;
+        </script>
         {% for event in event_list %}
             <li class="sc_cen">
                 {% if event %}
@@ -140,12 +143,14 @@
                                     document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.cancel }}</button>');
                                     break;
                             }
+                            event_count += 1;
                         </script>
                     </form>
                 {% else %}
                     {% csrf_token %}
                     <script>
-                        document.write("<input hidden name='slot' value='' style='text-align: center; width:100%;height:100%; border: 0px solid;'>");
+                        document.write("<input hidden name='slot"+ event_count +"' value='' style='text-align: center; width:100%;height:100%; border: 0px solid;'>");
+                        event_count += 1;
                     </script>
                 {% endif %}
             </li>

@@ -397,7 +397,7 @@
                             document.write("<div class='chart_date_date'><pre class='date_pre'>" + date_data[i].substr(0, 4) + "\n" + date_data[i].substr(5) + "</pre><input onchange='getObject(this);' name='date_"+i+"' type='date' value="+date_data[i]+"></div>");
                         }
                         else{
-                            document.write("<div class='chart_date_date'><input onchange='getObject(this);' name='date_"+i+"' type='date'><pre class='date_pre'></pre></div>");
+                            document.write("<div class='chart_date_date'><pre class='date_pre'></pre><input onchange='getObject(this);' name='date_"+i+"' type='date'></div>");
                         }
                     };
 
@@ -526,6 +526,14 @@
 <!--{% endfor %}-->
 <script>
     var chart_weight = "{{ weight_data }}";
+
+    var user = navigator.userAgent;
+    var is_mobile = false;
+    if( user.indexOf("iPhone") > -1 || user.indexOf("Android") > -1 ) {
+        is_mobile = true;
+        m_width = window.innerWidth || document.body.clientWidth
+    }
+
     if(chart_weight != '[]'){
         chart_weight = JSON.parse(chart_weight.replace(/'/g, '"'));
         var weight_max = Math.max(...chart_weight)*1.2;
@@ -562,13 +570,6 @@
             }
         }
 
-        var user = navigator.userAgent;
-        var is_mobile = false;
-        if( user.indexOf("iPhone") > -1 || user.indexOf("Android") > -1 ) {
-            is_mobile = true;
-            m_width = window.innerWidth || document.body.clientWidth
-        }
-
         var length = chart_weight.length - 13;
 
         if(is_mobile == false){
@@ -587,20 +588,18 @@
                 document.getElementById('chart_width_edit').scrollLeft = add_width;
             }
         }else{
-            if(length > 0){
-                var add_width = (chart_weight.length-1)*41
-                document.getElementById('weight_line').style.width = add_width + 'px';
-                document.getElementById('muscle_line').style.width = add_width + 'px';
-                document.getElementById('fat_line').style.width = add_width + 'px';
-                document.getElementById('date_line').style.width = add_width + 'px';
-                document.getElementById('chart_width').scrollLeft = add_width;
+            var add_width = (chart_weight.length-1)*41
+            document.getElementById('weight_line').style.width = add_width + 'px';
+            document.getElementById('muscle_line').style.width = add_width + 'px';
+            document.getElementById('fat_line').style.width = add_width + 'px';
+            document.getElementById('date_line').style.width = add_width + 'px';
+            document.getElementById('chart_width').scrollLeft = add_width;
 
-                document.getElementById('weight_line_edit').style.width = add_width + 'px';
-                document.getElementById('muscle_line_edit').style.width = add_width + 'px';
-                document.getElementById('fat_line_edit').style.width = add_width + 'px';
-                document.getElementById('date_line_edit').style.width = add_width + 'px';
-                document.getElementById('chart_width_edit').scrollLeft = add_width;
-            }
+            document.getElementById('weight_line_edit').style.width = add_width + 'px';
+            document.getElementById('muscle_line_edit').style.width = add_width + 'px';
+            document.getElementById('fat_line_edit').style.width = add_width + 'px';
+            document.getElementById('date_line_edit').style.width = add_width + 'px';
+            document.getElementById('chart_width_edit').scrollLeft = add_width;
         }
 
         var chart = c3.generate({
@@ -733,6 +732,19 @@
                 pattern: ['black']
             }
         });
+    }else{
+        if(is_mobile == true){
+            var add_width = 492
+            document.getElementById('weight_line').style.width = add_width + 'px';
+            document.getElementById('muscle_line').style.width = add_width + 'px';
+            document.getElementById('fat_line').style.width = add_width + 'px';
+            document.getElementById('date_line').style.width = add_width + 'px';
+
+            document.getElementById('weight_line_edit').style.width = add_width + 'px';
+            document.getElementById('muscle_line_edit').style.width = add_width + 'px';
+            document.getElementById('fat_line_edit').style.width = add_width + 'px';
+            document.getElementById('date_line_edit').style.width = add_width + 'px';
+        }
     }
 </script>
 
