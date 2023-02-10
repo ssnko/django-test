@@ -31,7 +31,7 @@
         <span class="labels" data-on="회원일정" data-off="회원일정"></span>
     </label>
     <label id="check2" class="toggle right">
-        {% if checked %}
+        {% if checked2 %}
             <input type="checkbox" onclick='getCheckboxValue2(event)' checked>
         {% else %}
             <input type="checkbox" onclick='getCheckboxValue2(event)'>
@@ -82,8 +82,15 @@
             document.getElementById("sc_name2").style.display = "block";
             const element = document.getElementById('name_line');
             element.style.width = '45%';
-            console.log(document.getElementById("sc_name").style.display);
           }
+        }
+
+        var time_list = '{{ time_list }}';
+        time_list = JSON.parse(time_list.replace(/&#x27;/g, '"'));
+        var time_set_id = '';
+        function time_select(time){
+            document.getElementById('slot' + time_list.findIndex((e) => e == time)).hidden = false;
+            time_set_id = time_list.findIndex((e) => e == time)
         }
     </script>
 </div>
@@ -132,24 +139,41 @@
 
                             var cc = "{{ event.cancel }}";
 
-                            switch(cc){
-                                case 'None':
-                                    document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }}</button>');
-                                    break;
-                                case '차감':
-                                    document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }} {{ event.cancel }}</button>');
-                                    break;
-                                case '취소':
-                                    document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.cancel }}</button>');
-                                    break;
+                            console.log("{{ event.name_id }}");
+
+                            if("{{ event.name_id }}" != ''){
+                                switch(cc){
+                                    case 'None':
+                                        document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }}</button>');
+                                        break;
+                                    case '차감':
+                                        document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}{{ event.count }} {{ event.cancel }}</button>');
+                                        break;
+                                    case '취소':
+                                        document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.cancel }}</button>');
+                                        break;
+                                }
+                            }else{
+                                switch(cc){
+                                    case 'None':
+                                        document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }}</button>');
+                                        break;
+                                    case '차감':
+                                        document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.full_count }} {{ event.cancel }}</button>');
+                                        break;
+                                    case '취소':
+                                        document.write('<button style="width:100%; height:100%; border: 0px; background: #ffffff; color:black;">{{ event.name }} {{ event.cancel }}</button>');
+                                        break;
+                                }
                             }
+
                             event_count += 1;
                         </script>
                     </form>
                 {% else %}
                     {% csrf_token %}
                     <script>
-                        document.write("<input hidden name='slot"+ event_count +"' value='' style='text-align: center; width:100%;height:100%; border: 0px solid;'>");
+                        document.write("<input hidden id='slot"+ event_count +"' value='' style='text-align: center; width:100%;height:100%; border: 0px solid;'>");
                         event_count += 1;
                     </script>
                 {% endif %}
@@ -180,11 +204,23 @@
         </li>
     {% endfor %}
 </ul>
-<ul class="select2 left" id="sc_name2" style="display: {{ name_hidden }};">
+<ul class="select2 left" id="sc_name2" style="display: {{ name_hidden2 }};">
     <li>
         <form method="post" style="width: 100%; height: 100%;">
             {% csrf_token %}
-            <button type="button" onclick="" style="width: 100%; height: 100%; border: 0px; background: #ffffff; border-radius: 5px; color:black;">확인</button>
+            <input id="ec_2_time" type="hidden" name="sc_time" value="">
+            <button type="button" onclick="event_create2(this)" style="width: 100%; height: 100%; border: 0px; background: #ffffff; border-radius: 5px; color:black;">확인</button>
+            <input type="hidden" id="a_value_id" name="a_value" value="">
+            <button hidden type="submit" id="ec2_btn"></button>
+            <script>
+                function event_create2(e){
+                    document.getElementById('ec_2_time').value = time_list[time_set_id];
+                    document.getElementById('a_value_id').value = document.getElementById('slot' + time_set_id).value;
+                    if(document.getElementById('a_value_id').value != ''){
+                        document.getElementById('ec2_btn').click();
+                    }
+                }
+            </script>
             <div hidden><div></div>{{ form }}</div>
         </form>
     </li>

@@ -20,17 +20,25 @@ class Calendar(HTMLCalendar):
 					self.mem_count.append(events_per_day[i].name_id)
 		d = ''
 		for event in events_per_day:
-			count = Mem.objects.filter(id=event.name_id).values()[0]['count']
-			if count == None:
-				count = 0
+			if event.name_id == '':
+				if event.cancel == '취소':
+					d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
+				elif event.cancel == '차감':
+					d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name}</li>'
+				else:
+					d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
+			else:
+				count = Mem.objects.filter(id=event.name_id).values()[0]['count']
+				if count == None:
+					count = 0
 			# d += f'<li> {event.get_html_url} </li>'
 
-			if event.cancel == '취소':
-				d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
-			elif event.cancel == '차감':
-				d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
-			else:
-				d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+				if event.cancel == '취소':
+					d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
+				elif event.cancel == '차감':
+					d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+				else:
+					d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
 		if day != 0:
 			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}'"
 			now = datetime.now()

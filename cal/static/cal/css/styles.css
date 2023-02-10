@@ -235,24 +235,24 @@ a {
 
     .mem_name input{
         font-size: 16px;
-        font-weight: 900;
         background: none;
         outline: none;
         border: 0px solid #17a2b8;
         border-radius: 5px;
         margin-bottom: 5px;
         width: 30%;
+        height: 20px;
     }
 
     .mem_phone input{
         font-size: 16px;
-        font-weight: 900;
         background: none;
         outline: none;
         border: 0px solid #17a2b8;
         border-radius: 5px;
         margin-bottom: 5px;
         width: 65%;
+        height: 20px;
     }
 
     .mem_cs1 input{

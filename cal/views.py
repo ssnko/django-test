@@ -360,59 +360,124 @@ def schedule(request):
 
     form = EventForm(request.POST or None, instance=instance, initial={'name': '데이터', 'account': user_name})
     if request.POST and form.is_valid():
-        form_name = name_list[int(request.POST['number'])]
-        form_time = request.POST["sc_time"]
+        try:
+            form_name = request.POST['a_value']
+            form_time = request.POST["sc_time"]
+            name_id = ''
 
-        create_date = f'{year}-{month}-{day} {form_time}'
-        create_date = datetime.strptime(create_date, '%Y-%m-%d %H:%M')
-        overlap = Event.objects.filter(time=create_date, account=user_name).values_list('id', flat=True)
-        if len(overlap) != 0:
-            Event.objects.get(pk=overlap[0]).delete()
+            create_date = f'{year}-{month}-{day} {form_time}'
+            create_date = datetime.strptime(create_date, '%Y-%m-%d %H:%M')
+            overlap = Event.objects.filter(time=create_date, account=user_name).values_list('id', flat=True)
+            if len(overlap) != 0:
+                Event.objects.get(pk=overlap[0]).delete()
 
-        com = form.save(commit=False)
-        name_id = Mem.objects.filter(account=user_name).values()[int(request.POST['number'])]['id']
+            com = form.save(commit=False)
 
-        com.name = form_name
-        com.time = f'{year}-{month}-{day}T{form_time}'
-        com.name_id = name_id
-        com.save()
-        data = Event.objects.filter(name_id=name_id, account=user_name).order_by('time').values()
-        for i in range(len(data)):
-            count = Event.objects.get(pk=data[i]['id'])
-            count.count = i + 1
-            count.save()
+            com.name = form_name
+            com.time = f'{year}-{month}-{day}T{form_time}'
+            com.name_id = name_id
+            com.save()
+            data = Event.objects.filter(name_id=name_id, account=user_name).order_by('time').values()
+            for i in range(len(data)):
+                count = Event.objects.get(pk=data[i]['id'])
+                count.count = i + 1
+                count.save()
 
-        if id != None:
-            events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id, account=user_name).values()
+            if id != None:
+                events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id,
+                                              account=user_name).values()
+            else:
+                events = Event.objects.filter(time__year=year, time__month=month, time__day=day,
+                                              account=user_name).values()
+
+            for i in range(len(events)):
+                if events[i]['name_id'] == '':
+                    events[i]['full_count'] = ''
+                else:
+                    full_count = Mem.objects.filter(id=events[i]['name_id']).values()[0]['count']
+
+                    if full_count == None:
+                        full_count = 0
+                    events[i]['full_count'] = f'{full_count}/'
+
+            event_list = []
+            for i in range(len(time_30)):
+                event_list.append('')
+
+            for i in range(len(events)):
+                if events[i]['time'].strftime('%H:%M') in time_30:
+                    event_list[time_30.index(events[i]['time'].strftime('%H:%M'))] = events[i]
+
+            if id != None:
+                return render(request, 'cal/schedule.html',
+                              {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day,
+                               'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_hidden2': 'block',
+                               'checked2': 'checked', 'name_line_width': '45%'})
+            else:
+                return render(request, 'cal/schedule.html',
+                              {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day,
+                               'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_hidden2': 'block', 'checked2': 'checked',
+                               'name_line_width': '45%'})
+        except:
+            form_name = name_list[int(request.POST['number'])]
+            form_time = request.POST["sc_time"]
+            name_id = Mem.objects.filter(account=user_name).values()[int(request.POST['number'])]['id']
+
+            create_date = f'{year}-{month}-{day} {form_time}'
+            create_date = datetime.strptime(create_date, '%Y-%m-%d %H:%M')
+            overlap = Event.objects.filter(time=create_date, account=user_name).values_list('id', flat=True)
+            if len(overlap) != 0:
+                Event.objects.get(pk=overlap[0]).delete()
+
+            com = form.save(commit=False)
+
+            com.name = form_name
+            com.time = f'{year}-{month}-{day}T{form_time}'
+            com.name_id = name_id
+            com.save()
+            data = Event.objects.filter(name_id=name_id, account=user_name).order_by('time').values()
+            for i in range(len(data)):
+                count = Event.objects.get(pk=data[i]['id'])
+                count.count = i + 1
+                count.save()
+
+            if id != None:
+                events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id, account=user_name).values()
+            else:
+                events = Event.objects.filter(time__year=year, time__month=month, time__day=day, account=user_name).values()
+
+            for i in range(len(events)):
+                if events[i]['name_id'] == '':
+                    events[i]['full_count'] = ''
+                else:
+                    full_count = Mem.objects.filter(id=events[i]['name_id']).values()[0]['count']
+
+                    if full_count == None:
+                        full_count = 0
+                    events[i]['full_count'] = f'{full_count}/'
+
+            event_list = []
+            for i in range(len(time_30)):
+                event_list.append('')
+
+            for i in range(len(events)):
+                if events[i]['time'].strftime('%H:%M') in time_30:
+                    event_list[time_30.index(events[i]['time'].strftime('%H:%M'))] = events[i]
+
+            if id != None:
+                return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'name_hidden2': 'none', 'checked': 'checked', 'name_line_width': '45%'})
+            else:
+                return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'name_hidden2': 'none', 'checked': 'checked', 'name_line_width': '45%'})
+
+    for i in range(len(events)):
+        if events[i]['name_id'] == '':
+            events[i]['full_count'] = ''
         else:
-            events = Event.objects.filter(time__year=year, time__month=month, time__day=day, account=user_name).values()
-
-        for i in range(len(events)):
             full_count = Mem.objects.filter(id=events[i]['name_id']).values()[0]['count']
 
             if full_count == None:
                 full_count = 0
             events[i]['full_count'] = f'{full_count}/'
-
-        event_list = []
-        for i in range(len(time_30)):
-            event_list.append('')
-
-        for i in range(len(events)):
-            if events[i]['time'].strftime('%H:%M') in time_30:
-                event_list[time_30.index(events[i]['time'].strftime('%H:%M'))] = events[i]
-
-        if id != None:
-            return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'checked': 'checked', 'name_line_width': '45%'})
-        else:
-            return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'checked': 'checked', 'name_line_width': '45%'})
-
-    for i in range(len(events)):
-        full_count = Mem.objects.filter(id=events[i]['name_id']).values()[0]['count']
-
-        if full_count == None:
-            full_count = 0
-        events[i]['full_count'] = f'{full_count}/'
 
     event_list = []
     for i in range(len(time_30)):
@@ -423,9 +488,9 @@ def schedule(request):
             event_list[time_30.index(events[i]['time'].strftime('%H:%M'))] = events[i]
 
     if id != None:
-        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_line_width': '75%'})
+        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_hidden2': 'none', 'name_line_width': '75%'})
     else:
-        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_line_width': '75%'})
+        return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_hidden2': 'none', 'name_line_width': '75%'})
 
 def schedule_add(request):
     year = request.GET.get('year')
@@ -504,7 +569,7 @@ def schedule_edit(request, event_id=None):
 
         return HttpResponseRedirect(reverse('cal:calendar'))
 
-    return render(request, 'cal/schedule_add.html',{'form': form, 'event_id': event_id, 'year': year, 'month': month, 'day': day, 'id': id})
+    return render(request, 'cal/schedule_add.html',{'form': form, 'event_id': event_id, 'year': year, 'month': month, 'day': day, 'id': id, 'name_id': instance.name_id})
 
 def main(request):
     if request.method == "GET":

@@ -61,8 +61,13 @@
         <tr>
             <td></td>
             <td colspan="2">
-                <button type="button" class="btn btn-info left" onclick="event_cancel()"> 취소 </button>
-                <button type="button" class="btn btn-info left" onclick="cancel_minus()"> 차감 </button>
+                <script>
+                    var name_id = "{{ name_id }}"
+                    if(name_id != ''){
+                        document.write('<button type="button" class="btn btn-info left" onclick="event_cancel()"> 취소 </button>');
+                        document.write('<button type="button" class="btn btn-info left" onclick="cancel_minus()"> 차감 </button>');
+                    }
+                </script>
                 <button type="button" class="btn btn-info right" onclick="del()"> 삭제 </button>
             </td>
         </tr>
