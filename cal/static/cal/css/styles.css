@@ -243,6 +243,7 @@ a {
         width: 30%;
         padding-top: 10px;
         padding-bottom: 10px;
+        line-height:140%;
     }
 
     .mem_phone input{
@@ -255,6 +256,7 @@ a {
         width: 65%;
         padding-top: 10px;
         padding-bottom: 10px;
+        line-height:140%;
     }
 
     .mem_cs1 input{
