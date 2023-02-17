@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 import calendar
 import json
 from django.contrib.auth import authenticate, login
+import time
 
 from .models import *
 from .utils import Calendar, Calendar2
@@ -34,6 +35,7 @@ class CalendarView(generic.ListView):
     template_name = 'cal/calendar.html'
 
     def get_context_data(self, **kwargs):
+        self.time_start = time.time()
         user_name = self.request.user.username
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
@@ -42,6 +44,7 @@ class CalendarView(generic.ListView):
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
+        print("time :", time.time() - self.time_start)
         return context
 
 def get_date(req_month):
@@ -344,10 +347,12 @@ def schedule(request):
     instance = Event()
     if id != None:
         name = Mem.objects.filter(id=id).values()[0]['name']
-        events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id, account=user_name).values()
+        # events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id, account=user_name).values()
+        events = Event.objects.filter(account=user_name, time__contains=f'{year}-{month}-{day}', name_id=id).values()
     else:
         name = ''
-        events = Event.objects.filter(time__year=year, time__month=month, time__day = day, account=user_name).values()
+        # events = Event.objects.filter(time__year=year, time__month=month, time__day = day, account=user_name).values()
+        events = Event.objects.filter(account=user_name, time__contains=f'{year}-{month}-{day}').values()
 
     name_list = Mem.objects.filter(account=user_name).values_list('name', flat=True)
     choice = []
@@ -383,12 +388,15 @@ def schedule(request):
                 count.count = i + 1
                 count.save()
 
+            # if id != None:
+            #     events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id, account=user_name).values()
+            # else:
+            #     events = Event.objects.filter(time__year=year, time__month=month, time__day=day, account=user_name).values()
+
             if id != None:
-                events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id,
-                                              account=user_name).values()
+                events = Event.objects.filter(account=user_name, time__contains=f'{year}-{month}-{day}', name_id=id).values()
             else:
-                events = Event.objects.filter(time__year=year, time__month=month, time__day=day,
-                                              account=user_name).values()
+                events = Event.objects.filter(account=user_name, time__contains=f'{year}-{month}-{day}').values()
 
             for i in range(len(events)):
                 if events[i]['name_id'] == '':
@@ -442,9 +450,9 @@ def schedule(request):
                 count.save()
 
             if id != None:
-                events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id, account=user_name).values()
+                events = Event.objects.filter(account=user_name, time__contains=f'{year}-{month}-{day}', name_id=id).values()
             else:
-                events = Event.objects.filter(time__year=year, time__month=month, time__day=day, account=user_name).values()
+                events = Event.objects.filter(account=user_name, time__contains=f'{year}-{month}-{day}').values()
 
             for i in range(len(events)):
                 if events[i]['name_id'] == '':
@@ -465,7 +473,7 @@ def schedule(request):
                     event_list[time_30.index(events[i]['time'].strftime('%H:%M'))] = events[i]
 
             if id != None:
-                return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'name_hidden2': 'none', 'checked': 'checked', 'name_line_width': '45%'})
+                return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'id': id, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'none', 'name_hidden2': 'none', 'checked': 'checked', 'name_line_width': '75%'})
             else:
                 return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'name_hidden2': 'none', 'checked': 'checked', 'name_line_width': '45%'})
 

@@ -39,6 +39,12 @@
         <span class="labels" data-on="기타일정" data-off="기타일정"></span>
     </label>
     <script>
+        const urlParams
+        = new URLSearchParams(window.location.search);
+        if(urlParams.has('id') == true){
+            document.getElementById('check1').hidden = true;
+            document.getElementById('check2').hidden = true;
+        }
         function getCheckboxValue(event)  {
           let result = '';
           if(event.target.checked)  {
@@ -89,8 +95,20 @@
         time_list = JSON.parse(time_list.replace(/&#x27;/g, '"'));
         var time_set_id = '';
         function time_select(time){
-            document.getElementById('slot' + time_list.findIndex((e) => e == time)).hidden = false;
-            time_set_id = time_list.findIndex((e) => e == time)
+            if(urlParams.has('id') == false){
+                document.getElementByClassName('slot' + time_list.findIndex((e) => e == time)).hidden = false;
+                time_set_id = time_list.findIndex((e) => e == time)
+            }else{
+                var test1111 = document.getElementsByTagName("button");
+                for (var i=1; i < test1111.length; i++ ){
+
+                    const url = new URL(window.location.href);
+                    const urlParams = url.searchParams;
+                    if (urlParams.get('name') == test1111[i].innerText){
+                        test1111[i].click();
+                    }
+                }
+            }
         }
     </script>
 </div>

@@ -12,8 +12,15 @@ class Calendar(HTMLCalendar):
 	# filter events by day
 	def formatday(self, day, events):
 		events_per_day = events.filter(time__day=day)
-		self.count += len(events_per_day)
-		self.week_add[self.seven_count] += len(events_per_day)
+		if day == 0:
+			return '<td class="cal_line"></td>'
+		# start_date = datetime(self.year, self.month, day, 0)
+		# end_date = datetime(self.year, self.month, day, 23)
+		# events_per_day = events.filter(time__range=[start_date, end_date])
+		if len(events_per_day) !=0:
+			if events_per_day.values()[0]['cancel'] != '취소':
+				self.week_add[self.seven_count] += len(events_per_day)
+				self.count += len(events_per_day)
 		if len(events_per_day) > 0:
 			for i in range(len(events_per_day)):
 				if events_per_day[i].name_id not in self.mem_count:
@@ -66,8 +73,14 @@ class Calendar(HTMLCalendar):
 	# filter events by year and month
 	def formatmonth(self, account, withyear=True):
 		events = Event.objects.filter(account=account, time__year=self.year, time__month=self.month).order_by('time')
-		# print(events)
-		#
+
+		# start_date = datetime(self.year, self.month, 1)
+		# if self.month != 12:
+		# 	end_date = datetime(self.year, self.month+1, 1)
+		# else:
+		# 	end_date = datetime(self.year+1, 1, 1)
+		# events = Event.objects.filter(account=account, time__range=[start_date, end_date]).order_by('time')
+
 		# events = Event.objects.filter(time__year=self.year, time__month=self.month)
 
 		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
@@ -86,6 +99,7 @@ class Calendar(HTMLCalendar):
 			<th class="cal_line" style="width: 70px;"><a>회원</a></th></tr>'''
 		self.week_count = 1
 		self.week_add = [0,0,0,0,0,0,0]
+
 		for week in self.monthdays2calendar(self.year, self.month):
 			cal += f'{self.formatweek(week, events)}\n'
 
@@ -132,6 +146,7 @@ class Calendar2(HTMLCalendar):
 		self.year = year
 		self.month = month
 		self.id = id
+		self.name = Mem.objects.filter(id=self.id).values()[0]['name']
 		super(Calendar2, self).__init__()
 
 	# formats a day as a td
@@ -162,7 +177,7 @@ class Calendar2(HTMLCalendar):
 			else:
 				d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
 		if day != 0:
-			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}&id={self.id}'"
+			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}&id={self.id}&name={self.name}'"
 			now = datetime.now()
 			if f'{self.year}{self.month}{day}' == f'{now.year}{now.month}{now.day}':
 				return f"<td onClick=location.href={b} class='cal_line'><div class='circle'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
