@@ -394,6 +394,9 @@ a {
     input[id="id_alarm_check"]:checked + label {
         background-color: #17a2b8;
     }
+    input[id="id_end_alarm_cb"]:checked + label {
+        background-color: #17a2b8;
+    }
 
     .chart_form{
         width: 95%;
@@ -977,6 +980,9 @@ a {
         background-color: #17a2b8;
     }
     input[id="id_alarm_check"]:checked + label {
+        background-color: #17a2b8;
+    }
+    input[id="id_end_alarm_cb"]:checked + label {
         background-color: #17a2b8;
     }
 

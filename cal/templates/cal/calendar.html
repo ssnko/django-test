@@ -16,5 +16,31 @@
 	<a class="btn btn-info right" href="{% url 'cal:list' %}"> 회원 목록 </a>
 	<a class="btn btn-info right" href=""> 현황표 </a>
 </div>
+<div id="alarm_box" class="alarm_box" hidden><button onclick="alarm_box_close();" id="alarm_btn"></button></div>
+<script>
+    function alarm_box_close() {
+        document.getElementById('alarm_box').hidden = true;
+    }
+
+    var al = '{{ al }}';
+	al = JSON.parse(al.replace(/&#x27;/g, '"'));
+	if(al[0] != 'False'){
+		if(al[1] != ''){
+			var text = '';
+			var user_list = '{{ user_list }}';
+			user_list = JSON.parse(user_list.replace(/&#x27;/g, '"'));
+			if(user_list.length != 0){
+				for (let i = 0; i < user_list.length; i++){
+					if(al[1] > user_list[i][1] && -1 < user_list[i][1]){
+						text += '' + user_list[i][0] + ' 헬스 종료 ' + user_list[i][1] + ' 일 전\n'
+						document.getElementById('alarm_box').hidden = false;
+					}
+				}
+			}
+			document.getElementById('alarm_btn').innerText = text;
+			console.log(text);
+		}
+	}
+</script>
 {{ calendar }}
 {% endblock %}

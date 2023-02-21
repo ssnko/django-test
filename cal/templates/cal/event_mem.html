@@ -510,20 +510,6 @@
     }
 </script>
 
-
-
-
-<!--{% for schedule in schedule_list %}-->
-<!--    <div class="clearfix">-->
-<!--        <form action="{% url 'cal:delete_schedule'%}" method="get">-->
-<!--            {% csrf_token %}-->
-<!--            <a class="btn btn-info mem_list" href="/event_mem/edit/{{ schedule.id }}/"> {{ schedule.time }} </a>-->
-<!--            <input type="hidden" name="schedule" value="{{ schedule.id }}">-->
-<!--            <input type="hidden" name="event_id" value="{{ event_id }}">-->
-<!--            <input class="btn btn-info"  type="submit" value="삭제">-->
-<!--        </form>-->
-<!--    </div>-->
-<!--{% endfor %}-->
 <script>
     var chart_weight = "{{ weight_data }}";
 
@@ -593,13 +579,28 @@
             document.getElementById('muscle_line').style.width = add_width + 'px';
             document.getElementById('fat_line').style.width = add_width + 'px';
             document.getElementById('date_line').style.width = add_width + 'px';
-            document.getElementById('chart_width').scrollLeft = add_width;
+            console.log(chart_weight);
+            if(chart_weight.length < 14){
+                var null_count = 0;
+                for (let i = 0; i < chart_weight.length-1; i++){
+                    if(chart_weight[i+1] != null){
+                        null_count += 1;
+                        console.log(null_count);
+                    }
+                }
+                if(null_count > 8){
+                    document.getElementById('chart_width').scrollLeft = (null_count-8)*41;
+                    document.getElementById('chart_width_edit').scrollLeft = (null_count-8)*41;
+                }
+            }else{
+                document.getElementById('chart_width').scrollLeft = add_width;
+                document.getElementById('chart_width_edit').scrollLeft = add_width;
+            }
 
             document.getElementById('weight_line_edit').style.width = add_width + 'px';
             document.getElementById('muscle_line_edit').style.width = add_width + 'px';
             document.getElementById('fat_line_edit').style.width = add_width + 'px';
             document.getElementById('date_line_edit').style.width = add_width + 'px';
-            document.getElementById('chart_width_edit').scrollLeft = add_width;
         }
 
         var chart = c3.generate({
@@ -748,4 +749,11 @@
     }
 </script>
 
+{% if new %}
+    <script>
+        document.getElementById('form_edit').click();
+        document.getElementById("form_cancel").hidden = true;
+        document.getElementById("re_save").hidden = true;
+    </script>
+{% endif %}
 {% endblock %}

@@ -92,6 +92,8 @@ class Option(models.Model):
     empty4 = models.CharField(max_length=200, null=True, blank=True)  # 비고칸
     empty5 = models.CharField(max_length=200, null=True, blank=True)  # 비고칸
     count_money = models.TextField(blank=True)  # 횟수에 따른 금액 변화 설정
+    end_alarm_cb = models.BooleanField(default=False)  # 헬스 종료일 알림 체크박스
+    end_alarm = models.PositiveIntegerField(blank=True, null=True)  # 헬스 종료일 알림 내용
 
     @property
     def get_html_url(self):

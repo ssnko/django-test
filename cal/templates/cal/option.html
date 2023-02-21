@@ -67,6 +67,13 @@
                 document.write("</tr>");
             }
         </script>
+        <tr>
+            <td style="height: 20px;"></td>
+        </tr>
+        <tr>
+            <td>헬스 종료일 알림 {{ form.end_alarm_cb }}<label for="id_end_alarm_cb"></label></td>
+            <td>{{ form.end_alarm }}</td>
+        </tr>
         <tr hidden><td>{{ form.account }}</td></tr>
         <tr hidden><td>{{ form.count }}</td></tr>
         <tr hidden><td>{{ form.count_money }}</td></tr>

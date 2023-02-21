@@ -17,12 +17,11 @@ class Calendar(HTMLCalendar):
 		# start_date = datetime(self.year, self.month, day, 0)
 		# end_date = datetime(self.year, self.month, day, 23)
 		# events_per_day = events.filter(time__range=[start_date, end_date])
-		if len(events_per_day) !=0:
-			if events_per_day.values()[0]['cancel'] != '취소':
-				self.week_add[self.seven_count] += len(events_per_day)
-				self.count += len(events_per_day)
 		if len(events_per_day) > 0:
 			for i in range(len(events_per_day)):
+				if events_per_day.values()[i]['cancel'] != '취소':
+					self.week_add[self.seven_count] += 1
+					self.count += 1
 				if events_per_day[i].name_id not in self.mem_count:
 					self.mem_count.append(events_per_day[i].name_id)
 		d = ''
@@ -157,10 +156,11 @@ class Calendar2(HTMLCalendar):
 			count = 0
 		filter_name = events.filter(name_id=self.id)
 		events_per_day = filter_name.filter(time__day=day)
-		self.count += len(events_per_day)
-		self.week_add[self.seven_count] += len(events_per_day)
 		if len(events_per_day) > 0:
 			for i in range(len(events_per_day)):
+				if events_per_day.values()[i]['cancel'] != '취소':
+					self.week_add[self.seven_count] += 1
+					self.count += 1
 				if events_per_day[i].name_id not in self.mem_count:
 					self.mem_count.append(events_per_day[i].name_id)
 		d = ''

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, date
+from datetime import time as date_time
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
@@ -17,7 +18,7 @@ from .forms import EventForm, MemForm, OptionForm
 def index(request):
     return HttpResponse('hello')
 
-def list(request):
+def list_sc(request):
     # return HttpResponse(reverse('cal:list'))
 
     # name_list = Mem.objects.order_by('-name')
@@ -35,16 +36,32 @@ class CalendarView(generic.ListView):
     template_name = 'cal/calendar.html'
 
     def get_context_data(self, **kwargs):
-        self.time_start = time.time()
         user_name = self.request.user.username
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
         cal = Calendar(d.year, d.month)
+        cal.setfirstweekday(calendar.SUNDAY)
         html_cal = cal.formatmonth(user_name, withyear=True)
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
-        print("time :", time.time() - self.time_start)
+
+        op = Option.objects.filter(account=user_name).values()[0]
+        if op['end_alarm'] != None:
+            al = [str(op['end_alarm_cb']), op['end_alarm']]
+        else:
+            al = [str(op['end_alarm_cb']), '']
+
+        user_list = list(Mem.objects.filter(account=user_name).values_list('name','health_end_date'))
+        check_list = []
+        for ul in user_list:
+            if ul[1] != None:
+                now = datetime.now()
+                diff = datetime.combine(ul[1], date_time()) - now
+                check_list.append([ul[0], diff.days+1])
+
+        context['al'] = al
+        context['user_list'] = check_list
         return context
 
 def get_date(req_month):
@@ -288,7 +305,35 @@ def event_mem(request, event_id=None):
             #     return HttpResponseRedirect(reverse('cal:list'))
             # return render(request, 'cal/event_mem.html', {'form': form, 'error': 'error'})
 
-        return render(request, 'cal/event_mem.html', {'form': form, 'event_id': event_id})
+        jsonDec = json.decoder.JSONDecoder()
+        weight = []
+        muscle = []
+        fat = []
+        date = []
+
+        # 횟수당 금액 불러오는곳
+        if len(Option.objects.filter(account=user_name)) != 0:
+            op_id = Option.objects.filter(account=user_name).values_list('id', flat=True)[0]
+            op_instance = Option.objects.get(pk=op_id)
+
+            option = Option.objects.filter(account=user_name).values()
+            if len(option) != 0:
+                if option[0]['count'] == 'NaN':
+                    option[0]['count'] = 0
+                option_ = [option[0]['count'], option[0]['empty1'], option[0]['empty2'], option[0]['empty3'],
+                                option[0]['empty4'], option[0]['empty5']]
+            else:
+                option_ = ['0', None, None, None, None, None]
+        else:
+            op_instance = Option()
+            option_ = ['0', None, None, None, None, None]
+
+        if op_instance.count_money != '':
+            count = jsonDec.decode(op_instance.count_money)
+        else:
+            count = [['', '', '', '', ''], ['', '', '', '', '']]
+
+        return render(request, 'cal/event_mem.html', {'form': form, 'event_id': event_id, 'new': 1, 'count_money':count, 'empty':option_, 'weight_data':weight, 'muscle_data':muscle, 'fat_data':fat, 'wmf_date':date})
 
 def delete_post(request, pk):
     form = get_object_or_404(Mem, pk=pk)
