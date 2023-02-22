@@ -10,6 +10,7 @@ class Event(models.Model):
     account = models.CharField(max_length=200)
     cancel = models.CharField(max_length=2, null=True, blank=True)  # 스케쥴 취소
     cancel_comment = models.TextField(null=True, blank=True)  # 희망 운동시간
+    # loop = models.CharField(max_length=200, null=True, blank=True)  # 일정 반복기능
     # start_time = models.DateTimeField()
     # end_time = models.DateTimeField()
 
@@ -57,6 +58,7 @@ class Mem(models.Model):
         ('재등록', '재등록'),
         ('SNS', 'SNS'),
         ('OT', 'OT'),
+        ('인계', '인계'),
     )
     resist_category = models.CharField(max_length=3, choices=resist_CHOICES, blank=True, default='')  # 등록 구분(초이스필드) -워크인,재등록,SNS,OT
 
@@ -77,6 +79,7 @@ class Mem(models.Model):
     # photo = models.FileField(upload_to = 'uploads/', null=True)
     money = models.PositiveIntegerField(blank=True, null=True)  # 금액
     re_data = models.TextField(blank=True)  # 재 등록시 과거 데이터 저장
+    start_count = models.PositiveIntegerField(blank=True, null=True)  # 시작 카운트
 
     @property
     def get_html_url(self):

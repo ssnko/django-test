@@ -245,6 +245,7 @@ class CalendarView2(generic.ListView, ModelFormMixin):
         context = super(CalendarView2, self).get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
         cal = Calendar2(d.year, d.month, self.id)
+        cal.setfirstweekday(calendar.SUNDAY)
         html_cal = cal.formatmonth(user_name, withyear=True)
         context['calendar'] = mark_safe(html_cal)
         context['prev_month2'] = prev_month2(d)
@@ -428,9 +429,14 @@ def schedule(request):
             com.name_id = name_id
             com.save()
             data = Event.objects.filter(name_id=name_id, account=user_name).order_by('time').values()
+            start_count = Mem.objects.filter(account=user_name, name=form_name).values_list('start_count', flat=True)
+            if start_count[0] != None:
+                start_count = start_count[0] - 1
+            else:
+                start_count = 0
             for i in range(len(data)):
                 count = Event.objects.get(pk=data[i]['id'])
-                count.count = i + 1
+                count.count = i + 1 + start_count
                 count.save()
 
             # if id != None:
@@ -489,9 +495,14 @@ def schedule(request):
             com.name_id = name_id
             com.save()
             data = Event.objects.filter(name_id=name_id, account=user_name).order_by('time').values()
+            start_count = Mem.objects.filter(account=user_name, name=form_name).values_list('start_count', flat=True)
+            if start_count[0] != None:
+                start_count = start_count[0]-1
+            else:
+                start_count = 0
             for i in range(len(data)):
                 count = Event.objects.get(pk=data[i]['id'])
-                count.count = i + 1
+                count.count = i + 1 + start_count
                 count.save()
 
             if id != None:

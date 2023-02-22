@@ -148,6 +148,23 @@
             <tr>
                 <td>등록 구분 <b>:</b> {{ form.resist_category }}</td>
             </tr>
+            <tr id="start_count_tr" hidden>
+                <td>시작 회차 <b>:</b> {{ form.start_count }}</td>
+            </tr>
+            <script>
+                if(document.getElementById("id_resist_category").value == '인계'){
+                    document.getElementById("start_count_tr").hidden = false;
+                }
+                $(document).ready(function(){
+                    $("select[name=resist_category]").change(function () {
+                        if(document.getElementById("id_resist_category").value == '인계'){
+                            document.getElementById("start_count_tr").hidden = false;
+                        }else{
+                            document.getElementById("start_count_tr").hidden = true;
+                        }
+                    });
+                });
+            </script>
             <tr>
                 <td>결제 방식 <b>:</b> {{ form.payment }}</td>
             </tr>
