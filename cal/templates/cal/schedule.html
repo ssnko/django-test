@@ -96,7 +96,7 @@
         var time_set_id = '';
         function time_select(time){
             if(urlParams.has('id') == false){
-                document.getElementByClassName('slot' + time_list.findIndex((e) => e == time)).hidden = false;
+                document.getElementById('slot' + time_list.findIndex((e) => e == time)).hidden = false;
                 time_set_id = time_list.findIndex((e) => e == time)
             }else{
                 var test1111 = document.getElementsByTagName("button");

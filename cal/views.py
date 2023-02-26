@@ -411,7 +411,7 @@ def schedule(request):
 
     form = EventForm(request.POST or None, instance=instance, initial={'name': '데이터', 'account': user_name})
     if request.POST and form.is_valid():
-        try:
+        try:  # 기타일정 추가부분
             form_name = request.POST['a_value']
             form_time = request.POST["sc_time"]
             name_id = ''
@@ -423,22 +423,10 @@ def schedule(request):
                 Event.objects.get(pk=overlap[0]).delete()
 
             com = form.save(commit=False)
-
             com.name = form_name
             com.time = f'{year}-{month}-{day}T{form_time}'
             com.name_id = name_id
             com.save()
-            data = Event.objects.filter(name_id=name_id, account=user_name).order_by('time').values()
-            start_count = Mem.objects.filter(account=user_name, name=form_name).values_list('start_count', flat=True)
-            if start_count[0] != None:
-                start_count = start_count[0] - 1
-            else:
-                start_count = 0
-            for i in range(len(data)):
-                count = Event.objects.get(pk=data[i]['id'])
-                count.count = i + 1 + start_count
-                count.save()
-
             # if id != None:
             #     events = Event.objects.filter(time__year=year, time__month=month, time__day=day, name_id=id, account=user_name).values()
             # else:
