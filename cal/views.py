@@ -522,8 +522,9 @@ def schedule(request):
                 return render(request, 'cal/schedule.html', {'form': form, 'event_list': event_list, 'year': year, 'month': month, 'day': day, 'time_list': time_30, 'name_list': choice, 'name_hidden': 'block', 'name_hidden2': 'none', 'checked': 'checked', 'name_line_width': '45%'})
 
     for i in range(len(events)):
-        if events[i]['name_id'] == '':
+        if events[i]['name_id'] == '' or events[i]['name_id'] == None:
             events[i]['full_count'] = ''
+            events[i]['count'] = ''
         else:
             full_count = Mem.objects.filter(id=events[i]['name_id']).values()[0]['count']
 
@@ -609,15 +610,16 @@ def schedule_edit(request, event_id=None):
     if request.POST and form.is_valid():
         form.save()
         num = 1
-        data = Event.objects.filter(name_id=request.POST['name_id'], account=user_name).order_by('time').values()
-        for i in range(len(data)):
-            event = Event.objects.get(pk=data[i]['id'])
-            if event.cancel != '취소':
-                event.count = num
-                num += 1
-            else:
-                event.count = ''
-            event.save()
+        if request.POST['name_id'] != '':
+            data = Event.objects.filter(name_id=request.POST['name_id'], account=user_name).order_by('time').values()
+            for i in range(len(data)):
+                event = Event.objects.get(pk=data[i]['id'])
+                if event.cancel != '취소':
+                    event.count = num
+                    num += 1
+                else:
+                    event.count = ''
+                event.save()
 
         return HttpResponseRedirect(reverse('cal:calendar'))
 
