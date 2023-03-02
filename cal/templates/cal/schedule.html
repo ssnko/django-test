@@ -9,6 +9,9 @@
     <script>
         var url = new URL(window.location.href);
         var id_true = url.searchParams.has("id");
+        var year = url.searchParams.get("year");
+        var month = url.searchParams.get("month");
+        var day = url.searchParams.get("day");
 
         document.write('{% if id %}');
         var id = url.searchParams.get("id");
@@ -19,6 +22,35 @@
 
         document.write('{% else %}');
         document.write("<a class='btn btn-info left' href='{% url 'cal:calendar' %}'> << </a>");
+        document.write('{% endif %}');
+
+        var d = new Date(year, month-1, day);
+        var pre_d = new Date(year, month-1, day);
+        pre_d.setTime(pre_d.getTime() - 86400000);
+        var next_d = new Date(year, month-1, day);
+        next_d.setTime(next_d.getTime() + 86400000);
+
+        var today_m = d.getMonth()+1
+        var pre_m = pre_d.getMonth()+1
+        var next_m = next_d.getMonth()+1
+
+        if(today_m < 10){
+            today_m = '0' + today_m
+        }
+        if(d.getDate() < 10){
+            var today_d = '0' + d.getDate()
+        }else{today_d = d.getDate()}
+
+        document.write('{% if id %}');
+        var id = url.searchParams.get("id");
+        var name = url.searchParams.get("name");
+        document.write("<a class='btn btn-info' href='/schedule/?year="+pre_d.getFullYear()+"&month="+pre_m+"&day="+pre_d.getDate()+"&id="+id+"&name="+name+"'> < </a>");
+        document.write("<a class='btn btn-info'>" + d.getFullYear() +" - "+ today_m +" - "+ today_d + "</a>");
+        document.write("<a class='btn btn-info' href='/schedule/?year="+next_d.getFullYear()+"&month="+next_m+"&day="+next_d.getDate()+"&id="+id+"&name="+name+"'> > </a>");
+        document.write('{% else %}');
+        document.write("<a class='btn btn-info' href='/schedule/?year="+pre_d.getFullYear()+"&month="+pre_m+"&day="+pre_d.getDate()+"'> < </a>");
+        document.write("<a class='btn btn-info'>" + d.getFullYear() +" - "+ today_m +" - "+ today_d + "</a>");
+        document.write("<a class='btn btn-info' href='/schedule/?year="+next_d.getFullYear()+"&month="+next_m+"&day="+next_d.getDate()+"'> > </a>");
         document.write('{% endif %}');
     </script>
 
@@ -154,6 +186,7 @@
                             document.write("<input hidden name='month' value='" + month + "'>");
                             document.write("<input hidden name='day' value='" + day + "'>");
                             document.write("<input hidden name='id' value='" + id + "'>");
+                            document.write("<input hidden name='cal' value='no'>");
 
                             var cc = "{{ event.cancel }}";
 

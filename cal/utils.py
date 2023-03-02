@@ -24,15 +24,19 @@ class Calendar(HTMLCalendar):
 					self.count += 1
 				if events_per_day[i].name_id not in self.mem_count:
 					self.mem_count.append(events_per_day[i].name_id)
+				if events_per_day.values()[i]['name_id'] == None or events_per_day.values()[i]['name_id'] == '':
+					self.week_add[self.seven_count] -= 1
+					self.count -= 1
 		d = ''
 		for event in events_per_day:
-			if event.name_id == '':
+			bb = f"location.href='/schedule/edit/{event.id}/?year={self.year}&month={self.month}&day={day}&id=null&cal=ok'"
+			if event.name_id == '' or event.name_id == None:
 				if event.cancel == '취소':
-					d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
+					d += f'<li onclick={bb} class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
 				elif event.cancel == '차감':
-					d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name}</li>'
+					d += f'<li onclick={bb} class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name}</li>'
 				else:
-					d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
+					d += f'<li onclick={bb} class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
 			else:
 				try:
 					count = Mem.objects.filter(id=event.name_id).values()[0]['count']
@@ -41,19 +45,25 @@ class Calendar(HTMLCalendar):
 						count = 0
 
 					if event.cancel == '취소':
-						d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
+						d += f'<li onclick={bb} class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} 취소</li>'
 					elif event.cancel == '차감':
-						d += f'<li class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+						d += f'<li onclick={bb} class="event_box" style="color:#adb5bd;">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
 					else:
-						d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+						d += f'<li onclick={bb} class="event_box"><a>{event.time.strftime("%H:%M")} {event.name} {count}/{event.count}</a> </li>'
 				except:
 					d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
 		if day != 0:
 			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}'"
 			now = datetime.now()
 			if f'{self.year}{self.month}{day}' == f'{now.year}{now.month}{now.day}':
-				return f"<td onClick=location.href={b} class='cal_line'><div class='circle'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
-			return f"<td onClick=location.href={b} class='cal_line'><div class='date'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+				if d != '':
+					return f"<td class='cal_line'><div class='circle' onClick={b}><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+				else:
+					return f"<td onClick={b} class='cal_line'><div class='circle'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+			if d != '':
+				return f"<td class='cal_line'><div class='date' onClick={b}><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+			else:
+				return f"<td onClick={b} class='cal_line'><div class='date'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
 		return '<td class="cal_line"></td>'
 
 	# formats a week as a tr
@@ -175,16 +185,23 @@ class Calendar2(HTMLCalendar):
 		# return '<td></td>'
 
 		for event in events_per_day:
+			bb = f"location.href='/schedule/edit/{event.id}/?year={self.year}&month={self.month}&day={day}&id={self.id}&name={self.name}'"
 			if event.cancel != '취소':
-				d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
+				d += f'<li onclick={bb} class="event_box">{event.time.strftime("%H:%M")} {event.name} {count}/{event.count} </li>'
 			else:
-				d += f'<li class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
+				d += f'<li onclick={bb} class="event_box">{event.time.strftime("%H:%M")} {event.name}</li>'
 		if day != 0:
 			b = f"location.href='/schedule/?year={self.year}&month={self.month}&day={day}&id={self.id}&name={self.name}'"
 			now = datetime.now()
 			if f'{self.year}{self.month}{day}' == f'{now.year}{now.month}{now.day}':
-				return f"<td onClick=location.href={b} class='cal_line'><div class='circle'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
-			return f"<td onClick=location.href={b} class='cal_line'><div class='date'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+				if d != '':
+					return f"<td class='cal_line'><div class='circle' onClick={b}><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+				else:
+					return f"<td onClick={b} class='cal_line'><div class='circle'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+			if d != '':
+				return f"<td class='cal_line'><div class='date' onClick={b}><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
+			else:
+				return f"<td onClick={b} class='cal_line'><div class='date'><span>{day}</span></div><ul style='padding:0;'>{d}</ul></td>"
 		return '<td class="cal_line"></td>'
 
 	# formats a week as a tr

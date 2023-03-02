@@ -108,9 +108,11 @@ class CalendarView2(generic.ListView, ModelFormMixin):
         user_name = self.request.user.username
         self.object = None
         if kwargs != {}:
+            self.id = kwargs['event_id']
             instance = get_object_or_404(Mem, pk=self.id)
         else:
             instance = Mem()
+
         self.form = MemForm(instance=instance, initial={'account': user_name})
 
         return generic.ListView.get(self, request, *args, **kwargs)
@@ -123,13 +125,6 @@ class CalendarView2(generic.ListView, ModelFormMixin):
             instance = get_object_or_404(Mem, pk=self.id)
         else:
             instance = Mem()
-
-        # listIWantToStore = [('2022-12-02','1'), ('2022-12-05', '2')]
-        # dd = json.dumps(listIWantToStore)
-        # # dd = instance.note1
-        # # print(dd, type(dd))
-        # jsonDec = json.decoder.JSONDecoder()
-        # dd_list = jsonDec.decode(dd)
 
         jsonDec = json.decoder.JSONDecoder()
         user_name = self.request.user.username
@@ -239,6 +234,7 @@ class CalendarView2(generic.ListView, ModelFormMixin):
                 self.option_ = ['0', None, None, None, None, None]
 
         return self.get(request, *args, **kwargs)
+        # return generic.ListView.get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         user_name = self.request.user.username
@@ -367,14 +363,22 @@ def delete_schedule(request):
         month = request.GET.get('month')
         day = request.GET.get('day')
         id = request.GET.get('id')
+        cal = request.GET.get('cal')
 
         if id != 'null':
             if  id != '':
-                return redirect(f'/schedule/?year={year}&month={month}&day={day}&id={id}')
+                if cal == 'no':
+                    return redirect(f'/schedule/?year={year}&month={month}&day={day}&id={id}')
+                else:
+                    # return HttpResponseRedirect(reverse('cal:event_mem_edit', kwargs={'event_id': id}))
+                    return redirect(f'/schedule/?year={year}&month={month}&day={day}&id={id}')
             else:
                 return HttpResponseRedirect(reverse('cal:calendar'))
         else:
-            return HttpResponseRedirect(reverse('cal:calendar'))
+            if cal == 'ok':
+                return HttpResponseRedirect(reverse('cal:calendar'))
+            else:
+                return redirect(f'/schedule/?year={year}&month={month}&day={day}')
 
     return render(request, 'cal/event_mem.html', {'form': form})
 
@@ -604,6 +608,7 @@ def schedule_edit(request, event_id=None):
     month = request.GET.get('month')
     day = request.GET.get('day')
     id = request.GET.get('id')
+    cal = request.GET.get('cal')
 
     # form = EventForm(request.POST, instance=instance, initial={'account': user_name, 'name': instance.name})
     form = EventForm(request.POST or None, instance=instance)
@@ -623,7 +628,7 @@ def schedule_edit(request, event_id=None):
 
         return HttpResponseRedirect(reverse('cal:calendar'))
 
-    return render(request, 'cal/schedule_add.html',{'form': form, 'event_id': event_id, 'year': year, 'month': month, 'day': day, 'id': id, 'name_id': instance.name_id})
+    return render(request, 'cal/schedule_add.html',{'form': form, 'event_id': event_id, 'year': year, 'month': month, 'day': day, 'id': id, 'cal': cal, 'name_id': instance.name_id})
 
 def main(request):
     if request.method == "GET":
